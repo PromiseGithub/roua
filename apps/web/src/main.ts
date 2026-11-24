@@ -144,7 +144,7 @@ async function generate() {
   const secret: PasswordSecret = $("plaintext").checked
     ? { kind: "password", password }
     : { kind: "scram", verifier: await scramSha256Verifier(password) };
-  const plan = planPostgres(v.config!, { now, secret, generator: "ROUA web generator 0.1.0" });
+  const plan = planPostgres(v.config!, { now, secret, generator: "ROUA web generator 0.1.1" });
   const yamlConfig = { ...v.config!, auth: { ...v.config!.auth, password_env: "ROUA_PASSWORD" } };
   files = {
     "setup.sql": plan.setupSql,

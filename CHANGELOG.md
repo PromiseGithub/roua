@@ -2,7 +2,14 @@
 
 Notable changes to the ROUA specification and tools. The project uses semantic versioning. Before 1.0, minor versions may contain breaking changes.
 
-## 0.1.0 (unreleased draft)
+## 0.1.1 (2026-11-24)
+
+No changes to the specification or to tool behaviour.
+
+- Packages are now published from GitHub Actions with npm Trusted Publishing (OIDC). No npm token is stored in the repository, and every release carries provenance.
+- The web generator is hosted at https://kaizam.com.
+
+## 0.1.0 (2026-11-24)
 
 First public draft.
 
