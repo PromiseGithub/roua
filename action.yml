@@ -52,7 +52,8 @@ runs:
         ROUA_CLI_VERSION: ${{ inputs.cli-version }}
         ROUA_CLI_PATH: ${{ inputs.cli-path }}
       run: |
-        set -uo pipefail
+        # GitHub runs this with -e; the audit's own exit code is handled below.
+        set +e -uo pipefail
         args=(audit --json --url-env "$ROUA_URL_ENV")
         for r in $(echo "$ROUA_ROLES" | tr ',\n' '  '); do args+=(--role "$r"); done
         [ "$ROUA_ALL" = "true" ] && args+=(--all)
