@@ -1,9 +1,12 @@
 name: Release
 
-# Publishes @roua-dev/core, @roua-dev/app and @roua-dev/cli to npm with provenance.
-# Trigger: publish a GitHub release whose tag is v<version> (for example v0.1.0).
-# Needs the repository secret NPM_TOKEN (an npm granular token with publish
-# rights on the @roua-dev scope).
+# Publishes @roua-dev/core, @roua-dev/app and @roua-dev/cli to npm.
+# Trigger: publish a GitHub release whose tag is v<version> (for example v0.2.0).
+#
+# Uses npm Trusted Publishing (OIDC): no npm token is stored in this repository.
+# Each package on npmjs.com has a trusted publisher set to
+#   GitHub Actions / PromiseGithub / roua / release.yml
+# npm checks the short-lived GitHub identity of this run and adds provenance automatically.
 
 on:
   release:
@@ -24,6 +27,8 @@ jobs:
           node-version: 22
           cache: npm
           registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm 11.5.1 or later; Node 22 ships npm 10.
+      - run: npm install -g npm@latest
       - run: npm ci
       - run: npm run build
       - run: npm test
@@ -36,9 +41,7 @@ jobs:
             [ "$v" = "$tag" ] || { echo "packages/$p is $v, tag is $tag"; exit 1; }
           done
       - name: Publish (core first, the CLI depends on it)
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           for p in core app cli; do
-            npm publish -w packages/$p --provenance --access public
+            npm publish -w packages/$p --access public
           done
