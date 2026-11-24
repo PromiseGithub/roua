@@ -1,0 +1,22 @@
+# Example: Vendor support session, one week (L4)
+# Update expires_at before use: it must be in the future and within the profile maximum.
+# Never put a password in this file.
+roua_version: "0.1"
+account:
+  name: roua_support_vendor
+  profile: support
+  level: L4
+  owner: platform@example.com
+  approved_by: ciso@example.com
+  approval_ref: INC-4821
+  purpose: "Vendor investigating incident INC-4821"
+  expires_at: "2026-11-30T00:00:00Z"
+  limits: { max_connections: 2, statement_timeout_s: 15 }
+target:
+  engine: postgresql
+  database: appdb
+  schemas: [public]
+  object_owner: app_owner
+scope:
+  mask:
+    public.users.email: email

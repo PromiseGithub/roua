@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PromiseGithub/roua/schemas/roua-report.schema.json",
+  "title": "ROUA audit/verify report, version 0.1",
+  "type": "object",
+  "required": ["roua_report_version", "role", "generated_at", "results", "summary", "ok"],
+  "properties": {
+    "roua_report_version": { "const": "0.1" },
+    "role": { "type": "string" },
+    "server_version_num": { "type": ["integer", "null"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "ok": { "type": "boolean", "description": "true when there are no fail or error results" },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "pass": { "type": "integer" }, "info": { "type": "integer" }, "warn": { "type": "integer" },
+        "fail": { "type": "integer" }, "error": { "type": "integer" }
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "severity", "details"],
+        "properties": {
+          "id": { "type": "string", "description": "Stable check identifier, e.g. T1 or P2" },
+          "title": { "type": "string" },
+          "severity": { "enum": ["pass", "info", "warn", "fail", "error"] },
+          "details": { "type": "array", "items": { "type": "string" } },
+          "fix": { "type": "string" }
+        }
+      }
+    }
+  }
+}

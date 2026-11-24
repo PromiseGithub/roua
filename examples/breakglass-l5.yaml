@@ -1,0 +1,20 @@
+# Example: Break-glass access for an incident (L5): two approvers, at most 24 hours
+# Update expires_at before use: it must be in the future and within the profile maximum.
+# Never put a password in this file.
+roua_version: "0.1"
+account:
+  name: roua_support_incident
+  profile: support
+  level: L5
+  owner: oncall-lead@example.com
+  approved_by: [cto@example.com, ciso@example.com]
+  approval_ref: INC-4900
+  purpose: "Data repair investigation for INC-4900 (read-only)"
+  expires_at: "2026-11-24T06:00:00Z"   # within 24 hours of creation
+  limits: { max_connections: 1, statement_timeout_s: 60 }
+target:
+  engine: postgresql
+  database: appdb
+  schemas: [public, sales]
+scope:
+  exclude: ["public.api_keys"]

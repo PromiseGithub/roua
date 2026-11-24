@@ -1,0 +1,78 @@
+:root {
+  --bg: #f7f7f5;
+  --panel: #ffffff;
+  --ink: #1d1f23;
+  --muted: #5d6470;
+  --line: #dcdfe4;
+  --accent: #1f5f99;
+  --accent-ink: #ffffff;
+  --ok: #1d7a46;
+  --warn: #8a5a00;
+  --bad: #b3261e;
+  --code-bg: #14161a;
+  --code-ink: #e6e8eb;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121417;
+    --panel: #1a1d21;
+    --ink: #e7e9ec;
+    --muted: #9aa2ad;
+    --line: #2c3138;
+    --accent: #6aa8e0;
+    --accent-ink: #0b1622;
+    --ok: #5cc48a;
+    --warn: #e0b04d;
+    --bad: #f2867d;
+    --code-bg: #0d0f12;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
+.top { border-bottom: 1px solid var(--line); background: var(--panel); padding: 22px 0 16px; }
+h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: 0.01em; }
+h1 span { font-weight: 400; color: var(--muted); font-size: 17px; margin-left: 6px; }
+.lede { margin: 0 0 8px; color: var(--muted); }
+.privacy { margin: 0; font-size: 14px; }
+.grid > * { min-width: 0; }
+.grid { display: grid; grid-template-columns: minmax(340px, 460px) 1fr; gap: 24px; padding-top: 20px; padding-bottom: 30px; align-items: start; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+fieldset { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; margin: 0 0 14px; padding: 12px 14px 4px; }
+legend { font-weight: 600; padding: 0 6px; }
+label { display: block; margin: 0 0 10px; font-size: 13.5px; font-weight: 500; }
+label small, fieldset > small { display: block; color: var(--muted); font-weight: 400; font-size: 12.5px; margin-top: 3px; }
+fieldset > small { margin: 0 0 10px; }
+input, select, textarea { display: block; width: 100%; margin-top: 4px; padding: 7px 9px; font: inherit; font-size: 14px;
+  color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; }
+textarea { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: 13px; resize: vertical; }
+input:focus, select:focus, textarea:focus, button:focus-visible, pre:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+label.check { display: flex; gap: 8px; align-items: flex-start; font-weight: 400; }
+label.check input { width: auto; margin: 3px 0 0; }
+.help { margin: -4px 0 10px; font-size: 12.5px; color: var(--muted); }
+.pw { display: flex; gap: 6px; margin-bottom: 8px; }
+.pw input { margin: 0; font-family: ui-monospace, Consolas, monospace; }
+button { font: inherit; font-size: 14px; padding: 7px 12px; border-radius: 6px; border: 1px solid var(--line);
+  background: var(--panel); color: var(--ink); cursor: pointer; white-space: nowrap; }
+button:hover { border-color: var(--accent); }
+button.primary { width: 100%; background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; padding: 10px; }
+.output { position: sticky; top: 12px; }
+.empty { border: 1px dashed var(--line); border-radius: 8px; padding: 40px; text-align: center; color: var(--muted); }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.tabs button { border-bottom-left-radius: 0; border-bottom-right-radius: 0; font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
+.tabs button[aria-selected="true"] { background: var(--code-bg); color: var(--code-ink); border-color: var(--code-bg); }
+pre { margin: 0; background: var(--code-bg); color: var(--code-ink); padding: 14px; border-radius: 0 8px 8px 8px; overflow: auto;
+  max-height: 62vh; font: 12.5px/1.5 ui-monospace, "SF Mono", Consolas, monospace; white-space: pre; }
+.actions { display: flex; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
+.errors { border: 1px solid var(--bad); color: var(--bad); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; background: var(--panel); }
+.errors ul, #notes ul { margin: 4px 0 0; padding-left: 18px; }
+#notes { font-size: 13.5px; }
+#notes h3 { font-size: 14px; margin: 12px 0 2px; }
+#notes .warn h3 { color: var(--warn); }
+#notes code, .steps code { font-size: 12.5px; background: var(--panel); border: 1px solid var(--line); padding: 1px 4px; border-radius: 4px; }
+.steps { font-size: 13.5px; color: var(--muted); padding-left: 20px; }
+.foot { color: var(--muted); font-size: 12.5px; padding-bottom: 30px; }
+[hidden] { display: none !important; }

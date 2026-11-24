@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="__CSP__">
+<meta name="referrer" content="no-referrer">
+<title>ROUA generator: read-only PostgreSQL accounts</title>
+<style>__STYLE__</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>ROUA <span>Read-Only User Account generator</span></h1>
+    <p class="lede">Create a PostgreSQL account that can look at everything it should and change nothing.
+      For AI agents, demos, auditors and app reviewers.</p>
+    <p class="privacy" role="note"><strong>Your password never leaves this page.</strong>
+      Everything runs in your browser. This file makes no network requests and can be used offline.</p>
+  </div>
+</header>
+
+<main class="wrap grid">
+<form id="form" autocomplete="off" novalidate>
+  <fieldset>
+    <legend>Account</legend>
+    <label>Account name <input id="name" value="roua_agent_docs" spellcheck="false" required>
+      <small>Lowercase letters, digits and _. Convention: roua_&lt;profile&gt;_&lt;label&gt;</small></label>
+    <div class="row">
+      <label>Profile (why it exists) <select id="profile"></select></label>
+      <label>Level (what it can see) <select id="level"></select></label>
+    </div>
+    <p id="levelHelp" class="help"></p>
+    <label>Owner (accountable person) <input id="owner" value="you@example.com" spellcheck="false"></label>
+    <label>Purpose <input id="purpose" value="AI assistant learning our data model" maxlength="200"></label>
+    <div class="row">
+      <label>Approved by <input id="approvedBy" placeholder="cto@example.com" spellcheck="false">
+        <small>Comma-separated. L5 needs two.</small></label>
+      <label>Approval reference <input id="approvalRef" placeholder="TICKET-123" spellcheck="false"></label>
+    </div>
+    <div class="row">
+      <label>Expires (UTC) <input id="expiresDate" type="date"></label>
+      <label id="expiresTimeWrap" hidden>Time (UTC) <input id="expiresTime" type="time" value="18:00"></label>
+    </div>
+    <p id="expiryHelp" class="help"></p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Database</legend>
+    <div class="row">
+      <label>Database name <input id="database" value="appdb" spellcheck="false"></label>
+      <label>Table owner role <input id="objectOwner" placeholder="app_owner" spellcheck="false">
+        <small>Owns your tables; owns masked views at L4.</small></label>
+    </div>
+    <label>Schemas <input id="schemas" value="public" spellcheck="false"></label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Scope</legend>
+    <label data-levels="L2 L4 L5">Include <input id="include" placeholder="public.* (default: every table in the schemas)" spellcheck="false"></label>
+    <label data-levels="L1 L2 L3 L4 L5">Exclude tables <input id="exclude" value="public.salaries public.api_keys" spellcheck="false">
+      <small>schema.table, * allowed. Space or comma separated.</small></label>
+    <label data-levels="L1">Public objects <input id="publicObjects" value="public.products public.categories" spellcheck="false"></label>
+    <label data-levels="L3">Aggregate views <input id="analyticsViews" value="public.sales_by_month" spellcheck="false"></label>
+    <label data-levels="L1 L2 L4 L5">Hide columns <input id="columnsDeny" placeholder="public.users.national_id" spellcheck="false">
+      <small>Secret-looking columns (password, token, api_key, mfa…) are hidden automatically. List anything the detector would miss.</small></label>
+    <label data-levels="L1 L2 L4 L5">Not secrets after all <input id="columnsAllow" placeholder="public.events.tokens_used" spellcheck="false">
+      <small>Columns the secret detector flags by mistake.</small></label>
+    <label data-levels="L4">Masking rules
+      <textarea id="mask" rows="4" spellcheck="false">public.users.email: email
+public.users.phone: partial_last4
+public.users.date_of_birth: year_only</textarea>
+      <small>One per line. Functions: email, partial_last4, redact, hash, year_only, initials.</small></label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Limits and network</legend>
+    <div class="row">
+      <label>Max connections <input id="maxConnections" type="number" min="1" max="1000" value="5"></label>
+      <label>Statement timeout (s) <input id="statementTimeout" type="number" min="1" max="86400" value="30"></label>
+    </div>
+    <label>Allowed source IPs <input id="allowedSources" placeholder="10.0.0.0/24" spellcheck="false">
+      <small>Printed as pg_hba.conf lines to add.</small></label>
+    <label class="check"><input id="revokeTemp" type="checkbox"> Remove TEMP from PUBLIC (affects every role)</label>
+    <label class="check"><input id="revokePublicCreate" type="checkbox"> Remove CREATE on schema public from PUBLIC (needed on PostgreSQL 14 and older)</label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Password</legend>
+    <div class="pw">
+      <input id="password" type="text" spellcheck="false" autocomplete="off" aria-label="Password">
+      <button type="button" id="regen">New</button>
+      <button type="button" id="copyPw">Copy</button>
+    </div>
+    <label class="check"><input id="plaintext" type="checkbox"> Put the plaintext password in the script (not recommended)</label>
+    <small>By default the script contains only a SCRAM-SHA-256 verifier, so the password is not in the file, the server log or query history.
+      Save the password in a password manager now; it is not stored anywhere.</small>
+  </fieldset>
+
+  <button type="submit" class="primary">Generate scripts</button>
+</form>
+
+<section class="output" aria-live="polite">
+  <div id="errors" class="errors" hidden></div>
+  <div id="result" hidden>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <pre id="code" tabindex="0"></pre>
+    <div class="actions">
+      <button type="button" id="copy">Copy</button>
+      <button type="button" id="download">Download this file</button>
+      <button type="button" id="downloadAll">Download all</button>
+    </div>
+    <div id="notes"></div>
+    <ol class="steps">
+      <li>Read <b>setup.sql</b>, then run it as a superuser: <code>psql "$ADMIN_URL" -f setup.sql</code></li>
+      <li>Check it: run <b>audit.sql</b> as admin, or <code>roua verify</code> as the new account. Every check should pass.</li>
+      <li>Hand over the password once, through a password manager. Never by email or chat.</li>
+      <li>When the work is done, run <b>revoke.sql</b>.</li>
+    </ol>
+  </div>
+  <div id="empty" class="empty">Fill in the form and choose <b>Generate scripts</b>.</div>
+</section>
+</main>
+
+<footer class="wrap foot">
+  ROUA spec 0.1 (draft). The term ROUA was coined by Promise Okoroji.
+  Open source: github.com/PromiseGithub/roua. Build __BUILD__.
+</footer>
+<script>__SCRIPT__</script>
+</body>
+</html>

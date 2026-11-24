@@ -1,0 +1,18 @@
+# Example: Sales demo that reads only the public catalog (L1)
+# Update expires_at before use: it must be in the future and within the profile maximum.
+# Never put a password in this file.
+roua_version: "0.1"
+account:
+  name: roua_demo_catalog
+  profile: demo
+  level: L1
+  owner: sales-eng@example.com
+  approved_by: head-of-sales@example.com
+  purpose: "Product catalog demo on the synthetic demo database"
+  expires_at: "2026-12-20T00:00:00Z"
+target:
+  engine: postgresql
+  database: demo_db
+  schemas: [public]
+scope:
+  public_objects: ["public.products", "public.categories", "public.product_images"]

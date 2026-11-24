@@ -1,0 +1,22 @@
+# Example: BI tool reading aggregate views only (L3)
+# Update expires_at before use: it must be in the future and within the profile maximum.
+# Never put a password in this file.
+# Create the views first, for example:
+#   CREATE VIEW reporting.sales_by_month WITH (security_barrier) AS
+#     SELECT date_trunc('month', created_at) AS month, region, sum(total) AS revenue, count(*) AS orders
+#     FROM sales.orders GROUP BY 1, 2 HAVING count(*) >= 10;
+roua_version: "0.1"
+account:
+  name: roua_analytics_bi
+  profile: analytics
+  level: L3
+  owner: analytics-lead@example.com
+  approved_by: data-steward@example.com
+  purpose: "Dashboard tool reading monthly aggregates"
+  expires_at: "2027-05-15T00:00:00Z"
+target:
+  engine: postgresql
+  database: appdb
+  schemas: [reporting]
+scope:
+  analytics_views: ["reporting.sales_by_month", "reporting.signups_by_week"]

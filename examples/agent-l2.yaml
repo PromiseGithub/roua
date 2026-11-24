@@ -1,0 +1,25 @@
+# Example: AI agent learning operational data (L2)
+# Update expires_at before use: it must be in the future and within the profile maximum.
+# Never put a password in this file.
+roua_version: "0.1"
+account:
+  name: roua_agent_docs
+  profile: agent
+  level: L2
+  owner: data-lead@example.com
+  approved_by: cto@example.com
+  approval_ref: SEC-101
+  purpose: "AI assistant learning the order and product data model"
+  expires_at: "2027-02-15T00:00:00Z"
+  limits: { max_connections: 3, statement_timeout_s: 20 }
+  network: { allowed_sources: ["10.20.0.0/24"] }
+target:
+  engine: postgresql
+  database: appdb
+  schemas: [public, sales]
+  object_owner: app_owner
+scope:
+  exclude: ["public.salaries", "public.api_keys", "public.audit_log"]
+  columns_deny: ["public.users.national_id", "public.users.date_of_birth"]
+hardening:
+  revoke_temp_from_public: true

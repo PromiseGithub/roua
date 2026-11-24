@@ -1,0 +1,13 @@
+ROUA: Read-Only User Account
+Copyright 2026 Promise Okoroji and ROUA contributors
+
+The term "ROUA" (Read-Only User Account) and the original concept were
+created by Promise Okoroji (https://github.com/PromiseGithub).
+
+Source code in this repository is licensed under the Apache License,
+Version 2.0 (see LICENSE).
+
+The specification documents (SPEC.md and docs/ROUA-APP.md) are licensed
+under the Creative Commons Attribution 4.0 International License
+(see LICENSE-SPEC.md). Attribution: "ROUA specification by Promise Okoroji
+and contributors, https://github.com/PromiseGithub/roua".

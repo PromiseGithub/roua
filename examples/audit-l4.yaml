@@ -1,0 +1,29 @@
+# Example: External auditor with masked personal data (L4)
+# Update expires_at before use: it must be in the future and within the profile maximum.
+# Never put a password in this file.
+roua_version: "0.1"
+account:
+  name: roua_audit_q4review
+  profile: audit
+  level: L4
+  owner: compliance@example.com
+  approved_by: [cfo@example.com, ciso@example.com]
+  approval_ref: AUDIT-2026-Q4
+  purpose: "Q4 financial controls audit"
+  expires_at: "2026-12-20T00:00:00Z"
+target:
+  engine: postgresql
+  database: appdb
+  schemas: [public]
+  object_owner: app_owner
+scope:
+  exclude: ["public.api_keys"]
+  mask:
+    public.users.email: email
+    public.users.phone: partial_last4
+    public.users.full_name: initials
+    public.users.date_of_birth: year_only
+    public.users.national_id: redact
+    public.users.id: hash
+hardening:
+  revoke_temp_from_public: true

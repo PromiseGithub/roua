@@ -1,0 +1,20 @@
+# Example: App-store review: database side (L1). Pair with a ROUA-App sandbox account.
+# Update expires_at before use: it must be in the future and within the profile maximum.
+# Never put a password in this file.
+roua_version: "0.1"
+account:
+  name: roua_review_appstore
+  profile: review
+  level: L1
+  owner: mobile-lead@example.com
+  approved_by: cto@example.com
+  approval_ref: RELEASE-2.4
+  purpose: "App store review of release 2.4 (sandbox tenant only)"
+  expires_at: "2027-01-05T00:00:00Z"
+target:
+  engine: postgresql
+  database: sandbox_db
+  schemas: [public]
+scope:
+  public_objects: ["public.*"]
+  exclude: ["public.api_keys", "public.payment_methods"]

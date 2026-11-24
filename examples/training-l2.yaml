@@ -1,0 +1,16 @@
+# Example: Workshop on an anonymized copy (L2)
+# Update expires_at before use: it must be in the future and within the profile maximum.
+# Never put a password in this file.
+roua_version: "0.1"
+account:
+  name: roua_training_onboarding
+  profile: training
+  level: L2
+  owner: eng-manager@example.com
+  approved_by: data-steward@example.com
+  purpose: "New-hire SQL workshop on the anonymized staging copy"
+  expires_at: "2026-12-05T00:00:00Z"
+target:
+  engine: postgresql
+  database: staging_anon
+  schemas: [public]

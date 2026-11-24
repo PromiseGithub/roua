@@ -1,0 +1,6 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "tsout", "noEmit": false, "emitDeclarationOnly": true },
+  "include": ["src"],
+  "references": [{ "path": "../../packages/core" }]
+}
