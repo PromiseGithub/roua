@@ -25,7 +25,7 @@ import {
 import { connect, redactUrl, urlForUser, urlFromEnv, UsageError } from "./db.js";
 import { loadConfig } from "./config-file.js";
 
-export const VERSION = "0.1.1";
+export const VERSION = "0.2.0";
 
 const HELP = `roua ${VERSION}: Read-Only User Accounts for PostgreSQL (ROUA spec ${ROUA_SPEC_VERSION}, draft)
 

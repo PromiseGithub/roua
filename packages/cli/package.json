@@ -1,6 +1,6 @@
 {
   "name": "@roua-dev/cli",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "roua: audit, verify, create and revoke read-only PostgreSQL accounts",
   "license": "Apache-2.0",
   "author": "Promise Okoroji (https://github.com/PromiseGithub)",
@@ -35,7 +35,7 @@
     "NOTICE"
   ],
   "dependencies": {
-    "@roua-dev/core": "0.1.1",
+    "@roua-dev/core": "0.2.0",
     "pg": "^8.13.0",
     "yaml": "^2.6.0"
   },
