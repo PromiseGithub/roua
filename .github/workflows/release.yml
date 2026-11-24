@@ -26,7 +26,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          registry-url: https://registry.npmjs.org
+          # No registry-url: it makes setup-node write an .npmrc with a placeholder
+          # token, which npm then sends instead of using its GitHub identity.
       # Trusted publishing needs npm 11.5.1 or later; Node 22 ships npm 10.
       - run: npm install -g npm@latest
       - run: npm ci
@@ -43,5 +44,5 @@ jobs:
       - name: Publish (core first, the CLI depends on it)
         run: |
           for p in core app cli; do
-            npm publish -w packages/$p --access public
+            npm publish -w packages/$p --access public --loglevel verbose
           done
