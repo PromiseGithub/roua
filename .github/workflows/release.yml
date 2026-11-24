@@ -7,6 +7,7 @@ name: Release
 # Each package on npmjs.com has a trusted publisher set to
 #   GitHub Actions / PromiseGithub / roua / release.yml
 # npm checks the short-lived GitHub identity of this run and adds provenance automatically.
+# Releases are staged: approve them on npmjs.com before they go live.
 
 on:
   release:
@@ -41,8 +42,10 @@ jobs:
             v=$(node -p "require('./packages/$p/package.json').version")
             [ "$v" = "$tag" ] || { echo "packages/$p is $v, tag is $tag"; exit 1; }
           done
-      - name: Publish (core first, the CLI depends on it)
+      # The trusted publishers allow only `npm stage publish`: each release waits on
+      # npmjs.com until a maintainer approves it with 2FA.
+      - name: Stage for publishing (core first, the CLI depends on it)
         run: |
           for p in core app cli; do
-            npm publish -w packages/$p --access public --loglevel verbose
+            (cd packages/$p && npm stage publish --access public --loglevel verbose)
           done
