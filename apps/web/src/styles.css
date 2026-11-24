@@ -167,3 +167,13 @@ details p { color: var(--muted); margin: 0 0 14px; }
 .footlinks a { color: var(--muted); text-decoration: none; }
 .footlinks a:hover { color: var(--accent); text-decoration: underline; }
 .dbtable td a { font-weight: 650; }
+.dbcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.dbcard, .guide { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--ink); text-decoration: none; }
+.dbcard:hover, .guide:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.dbcard b, .guide b { font-size: 16.5px; }
+.dbcard > span:last-child, .guide span { color: var(--muted); font-size: 14px; }
+.guides { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-top: 12px; }
+.guide { background: var(--accent-soft); border-color: transparent; }
+.cards.channels { grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+.channel .snippet { margin: 10px 0 8px; font-size: 12px; }
+.channel .more { font-size: 14px; }

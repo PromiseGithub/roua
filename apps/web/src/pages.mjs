@@ -331,3 +331,54 @@ gcloud iam service-accounts keys create key.json …`,
 ];
 
 export const ENGINE_PAGES = PAGES.filter((p) => p.engine);
+
+const SUPPORT = {
+  postgresql: ["full", "Full"], mysql: ["tested", "Tested in CI"], mariadb: ["tested", "Tested in CI"], sqlserver: ["tested", "Tested in CI"],
+  oracle: ["tested", "Tested in CI"], mongodb: ["tested", "Tested in CI"], redis: ["tested", "Tested in CI"],
+  snowflake: ["preview", "Preview"], bigquery: ["preview", "Preview"],
+};
+const NAMES = { postgresql: "PostgreSQL", mysql: "MySQL", mariadb: "MariaDB", sqlserver: "SQL Server", oracle: "Oracle", mongodb: "MongoDB", redis: "Redis / Valkey", snowflake: "Snowflake", bigquery: "BigQuery" };
+const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+const channel = (title, text, code, link) => `<article class="card channel"><h3>${title}</h3><p>${text}</p><pre class="snippet">${esc(code)}</pre>${link ? `<p class="more">${link}</p>` : ""}</article>`;
+
+const SNIP_ACTION = [
+  "- uses: PromiseGithub/roua@v0.3.0",
+  "  env:",
+  "    ADMIN_DATABASE_URL: $" + "{{ secrets.ADMIN_DATABASE_URL }}",
+  "  with:",
+  "    roles: readonly",
+].join("\n");
+const SNIP_MCP = ['{ "mcpServers": { "roua": {', '  "command": "npx",', '  "args": ["-y", "@roua-dev/cli", "mcp"] } } }'].join("\n");
+const SNIP_DOCKER = ["docker run --rm -e ADMIN_DATABASE_URL \\", "  ghcr.io/promisegithub/roua audit --all"].join("\n");
+const DB_CARDS = ENGINE_PAGES.map(
+  (p) => `<a class="dbcard" href="/${p.path}"><b>${NAMES[p.engine]}</b><span class="badge ${SUPPORT[p.engine][0]}">${SUPPORT[p.engine][1]}</span><span>${esc(p.h1)}</span></a>`,
+).join("\n      ");
+
+PAGES[0].section = `<section class="band" id="start">
+  <div class="wrap">
+    <h2>Pick your database</h2>
+    <p class="sub">Each page explains the usual way of making a read-only account, what it misses, and what ROUA does instead, with the generator ready for that database.</p>
+    <div class="dbcards">
+      ${DB_CARDS}
+    </div>
+    <div class="guides">
+      <a class="guide" href="/ai-agents/"><b>Guide: AI agents</b><span>Give an agent or MCP server database access without giving it the keys.</span></a>
+      <a class="guide" href="/app-review/"><b>Guide: app review accounts</b><span>Demo logins for App Store and Google Play review that cannot break production.</span></a>
+    </div>
+  </div>
+</section>
+<section id="tools">
+  <div class="wrap">
+    <h2>Use it where you work</h2>
+    <p class="sub">The same rules everywhere: in your browser, in your terminal, in CI, for AI agents, and in containers. Free and open source.</p>
+    <div class="cards channels">
+      ${channel("In your browser", "This page. Nothing to install, nothing sent anywhere.", "https://kaizam.com", `<a href="#generator">Create an account</a> · <a href="#check">Audit one</a>`)}
+      ${channel("Command line", "Audit, create, verify and revoke PostgreSQL accounts.", "npx @roua-dev/cli audit --role readonly", `<a href="https://www.npmjs.com/package/@roua-dev/cli" rel="noopener">npm</a>`)}
+      ${channel("GitHub Action", "Fail the build when an account stops being read-only.", SNIP_ACTION, `<a href="https://github.com/marketplace/actions/roua-audit" rel="noopener">GitHub Marketplace</a>`)}
+      ${channel("MCP server for AI agents", "Agents can audit accounts and prepare ROUA scripts; secrets never enter the chat.", SNIP_MCP, `<a href="/ai-agents/">How to set it up</a>`)}
+      ${channel("Docker", "No Node.js needed.", SNIP_DOCKER, `<a href="https://github.com/PromiseGithub/roua#docker" rel="noopener">Details</a>`)}
+      ${channel("JavaScript library", "Generate scripts for any of the nine databases from your own tools.", 'import { planEngine } from "@roua-dev/core";', `<a href="https://github.com/PromiseGithub/roua#other-databases" rel="noopener">API</a>`)}
+    </div>
+  </div>
+</section>`;
