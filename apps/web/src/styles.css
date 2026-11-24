@@ -177,3 +177,6 @@ details p { color: var(--muted); margin: 0 0 14px; }
 .cards.channels { grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
 .channel .snippet { margin: 10px 0 8px; font-size: 12px; }
 .channel .more { font-size: 14px; }
+.card.fb { text-decoration: none; color: var(--ink); background: var(--panel); transition: border-color 0.15s; }
+.card.fb:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.card.fb h3 { font-size: 16.5px; }

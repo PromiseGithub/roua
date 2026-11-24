@@ -6,6 +6,8 @@ ROUA (*Read-Only User Account*) is an open standard and toolkit for accounts you
 
 > Spec **0.1 (draft)** · PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Snowflake, BigQuery · The term ROUA was coined by [Promise Okoroji](https://github.com/PromiseGithub).
 
+> **Feedback wanted.** ROUA is young and shaped by the people who use it. [Share an idea](https://github.com/PromiseGithub/roua/discussions/new?category=ideas), [tell us what to improve](https://github.com/PromiseGithub/roua/issues/new/choose), or [say hello in Discussions](https://github.com/PromiseGithub/roua/discussions/2). Collaborators are welcome.
+
 ## Check the accounts you already have
 
 ```console
@@ -158,9 +160,15 @@ CI runs the integration suite against PostgreSQL 13, 14, 15, 16 and 17.
 
 Credibility is everything for a tool like this. If you can make `roua verify` pass on an account that can write or read a secret, that is a vulnerability: please report it privately as described in [SECURITY.md](SECURITY.md). Read the [threat model](docs/threat-model.md) for what ROUA does and does not protect against.
 
-## Contributing
+## Feedback and collaboration
 
-Issues, reviews of the draft spec, and attempts to break `verify` are all very welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [roadmap](ROADMAP.md). Spec changes go through [RFCs](rfcs/README.md).
+ROUA gets better through the people who use it. All of these help:
+
+- **Ideas and feedback:** what is missing, confusing or could be better. Start a thread in [💡 Ideas](https://github.com/PromiseGithub/roua/discussions/categories/ideas) or reply to the [welcome discussion](https://github.com/PromiseGithub/roua/discussions/2).
+- **Problems:** a script that fails, an audit that is wrong, a confusing page. [Open an issue](https://github.com/PromiseGithub/roua/issues/new/choose).
+- **Databases:** [request a new one](https://github.com/PromiseGithub/roua/issues/new?template=database.yml), or help test Snowflake and BigQuery.
+- **Code and reviews:** see [CONTRIBUTING.md](CONTRIBUTING.md), the [roadmap](ROADMAP.md), and issues labelled [`help wanted`](https://github.com/PromiseGithub/roua/labels/help%20wanted) or [`good first issue`](https://github.com/PromiseGithub/roua/labels/good%20first%20issue). Spec changes go through [RFCs](rfcs/README.md).
+- **Collaboration:** database vendors, AI-agent platforms, security teams and anyone who wants to co-maintain. Start a thread in [Discussions](https://github.com/PromiseGithub/roua/discussions); all contact is through GitHub.
 
 ## License
 

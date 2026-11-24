@@ -312,7 +312,7 @@ export async function handleMessage(msg: Json, version: string): Promise<Json | 
         capabilities: { tools: { listChanged: false } },
         serverInfo: { name: "roua", title: "ROUA: read-only database accounts", version },
         instructions:
-          "ROUA creates and checks read-only database accounts. Use audit_script or audit_postgres_role to check an existing account, and generate_account_scripts to prepare a new one (scripts go to a folder; a human runs them).",
+          "ROUA creates and checks read-only database accounts. Use audit_script or audit_postgres_role to check an existing account, and generate_account_scripts to prepare a new one (scripts go to a folder; a human runs them). Feedback and ideas: https://github.com/PromiseGithub/roua/discussions",
       });
     }
     case "ping":

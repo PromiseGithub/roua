@@ -22,7 +22,8 @@ function enginePage(o) {
     h1: o.h1,
     lede: o.lede,
     section: `<section class="band pagebody"><div class="wrap narrowtext">${usual(o.usualCode, o.misses)}${does(o.does)}${limits(o.limits)}
-      <p class="cta"><a class="btn primary" href="#generator">Create a read-only ${o.name} account</a> <a class="btn" href="#check">Audit an existing ${o.name} user</a></p></div></section>`,
+      <p class="cta"><a class="btn primary" href="#generator">Create a read-only ${o.name} account</a> <a class="btn" href="#check">Audit an existing ${o.name} user</a></p>
+      <p class="help">Know ${o.name} well? Something here wrong, missing or worth adding? <a href="https://github.com/PromiseGithub/roua/issues/new?template=database.yml&amp;title=${encodeURIComponent(o.name + ": ")}" rel="noopener">Tell us about ${o.name}</a> or <a href="https://github.com/PromiseGithub/roua/discussions/new?category=ideas" rel="noopener">share an idea</a>.</p></div></section>`,
   };
 }
 

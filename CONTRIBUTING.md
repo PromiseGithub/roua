@@ -1,14 +1,23 @@
 # Contributing to ROUA
 
-Thank you for helping. ROUA is young, and reviews of the draft spec are as valuable as code.
+Thank you for helping. ROUA is young, and **feedback, ideas and reviews are as valuable as code.** You do not need to write code to make a difference.
+
+## Ways to help, smallest first
+
+- **Tell us what you think.** Reply to the [welcome discussion](https://github.com/PromiseGithub/roua/discussions/2) or start a thread in [💡 Ideas](https://github.com/PromiseGithub/roua/discussions/categories/ideas): what is missing, confusing, or could be better.
+- **Report problems** with the [issue forms](https://github.com/PromiseGithub/roua/issues/new/choose): bugs, wrong audit results, confusing pages, database requests, spec feedback.
+- **Share how you use ROUA** in [Show and tell](https://github.com/PromiseGithub/roua/discussions/categories/show-and-tell).
+- **Pick up an issue** labelled [`good first issue`](https://github.com/PromiseGithub/roua/labels/good%20first%20issue) or [`help wanted`](https://github.com/PromiseGithub/roua/labels/help%20wanted). Comment that you are on it, and ask anything.
+- **Collaborate.** Database vendors, AI-agent platforms, security teams and would-be co-maintainers: start a thread in [Discussions](https://github.com/PromiseGithub/roua/discussions). All contact is through GitHub.
 
 ## Most wanted
 
 1. **Try to break `verify`.** Build a PostgreSQL role that can write or read a secret while `roua verify` still passes. Report it privately ([SECURITY.md](SECURITY.md)) and you will be credited.
 2. **Review the spec.** Open an issue or discussion for anything unclear, wrong or missing in [SPEC.md](SPEC.md) or [ROUA-App](docs/ROUA-APP.md).
 3. **Run `roua audit --all` on a staging database** and tell us about false positives or confusing output.
-4. **New engines** (see [ROADMAP.md](ROADMAP.md)). An engine is accepted only with integration tests on a real server that prove writes fail.
-5. **ROUA-App adapters** for Django, Rails, Laravel and others.
+4. **New engines** (see [ROADMAP.md](ROADMAP.md)). An engine is accepted only with tests on a real server that prove writes fail; see `scripts/live-engine-test.mjs` and `.github/workflows/engines.yml`.
+5. **Test the preview engines** (Snowflake, BigQuery) if you have an account to test against: run the generated scripts on a throwaway account and report what happens.
+6. **ROUA-App adapters** for Django, Rails, Laravel and others.
 
 ## Development
 

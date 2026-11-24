@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💡 Share an idea or general feedback
+    url: https://github.com/PromiseGithub/roua/discussions/new?category=ideas
+    about: Ideas, what could be better, what you would use ROUA for. No idea is too small.
+  - name: ❓ Ask a question
+    url: https://github.com/PromiseGithub/roua/discussions/new?category=q-a
+    about: How do I…? Does ROUA…? Ask in Q&A.
+  - name: 🔒 Report a vulnerability privately
+    url: https://github.com/PromiseGithub/roua/security/advisories/new
+    about: If you can make an audit pass on an account that can write or read secrets, please report it privately.

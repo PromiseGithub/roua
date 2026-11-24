@@ -118,6 +118,7 @@ export function planPostgres(cfg: RouaConfig, opts: PlanOptions): Plan {
     `-- fully applies or changes nothing. It is safe to run again.`,
     `--`,
     `-- Next: run audit.sql (or \`roua verify\`) before handing over credentials.`,
+    `-- Problems or ideas? https://github.com/PromiseGithub/roua/issues`,
     `-- ${"=".repeat(74)}`,
   ];
   out.push(header.join("\n"), "", "BEGIN;", "");

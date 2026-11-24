@@ -1,0 +1,34 @@
+name: 🐞 Something is wrong
+description: A script fails, the audit is wrong, the website misbehaves, or the docs are confusing.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for taking the time. Please never paste passwords, connection strings or real customer data.
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where
+      options: [Website (kaizam.com), CLI, GitHub Action, MCP server, Docker image, Generated scripts, Documentation or spec, Other]
+    validations: { required: true }
+  - type: dropdown
+    id: engine
+    attributes:
+      label: Database
+      options: [Not database-specific, PostgreSQL, MySQL, MariaDB, SQL Server / Azure SQL, Oracle, MongoDB, Redis / Valkey, Snowflake, BigQuery]
+    validations: { required: true }
+  - type: input
+    id: version
+    attributes:
+      label: Database version and ROUA version
+      placeholder: MySQL 8.4, @roua-dev/cli 0.3.0
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+      description: Include the error message or audit output if you have it.
+    validations: { required: true }
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can we reproduce it?

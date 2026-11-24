@@ -1,0 +1,15 @@
+name: 📜 Spec feedback
+description: Something unclear, wrong or missing in the ROUA specification or ROUA-App.
+labels: [spec, feedback]
+body:
+  - type: input
+    id: section
+    attributes:
+      label: Section
+      placeholder: SPEC.md §4 Levels, or ROUA-APP.md sandbox mode
+  - type: textarea
+    id: feedback
+    attributes:
+      label: Feedback
+      description: Larger changes go through an RFC (see rfcs/README.md); an issue is a good first step.
+    validations: { required: true }

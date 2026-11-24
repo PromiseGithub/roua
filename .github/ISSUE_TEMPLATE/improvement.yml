@@ -1,0 +1,26 @@
+name: ✨ Suggest an improvement
+description: A feature, a better default, a clearer page, something ROUA should do differently.
+labels: [enhancement, feedback]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The problem or situation matters more than the solution.
+    validations: { required: true }
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would make it better?
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options: [Website, CLI, GitHub Action, MCP server, Docker image, Specification, Documentation, A specific database]
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Would you like to help?
+      options:
+        - label: I would like to work on this (we will help you get started)

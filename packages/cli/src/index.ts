@@ -49,6 +49,7 @@ Output: --json for machine-readable reports, --strict to fail on warnings, --no-
 Exit codes: 0 ok, 1 checks failed, 2 usage or connection error.
 
 Docs, spec and issues: https://github.com/PromiseGithub/roua
+Feedback and ideas welcome: https://github.com/PromiseGithub/roua/discussions
 `;
 
 interface Io {

@@ -1,0 +1,21 @@
+name: 🗄️ Request or improve a database
+description: Ask for a new database, report something ROUA misses on one, or offer to test a preview engine.
+labels: [database]
+body:
+  - type: input
+    id: engine
+    attributes:
+      label: Database or service
+      placeholder: ClickHouse, Elasticsearch, DynamoDB, Supabase, PlanetScale…
+    validations: { required: true }
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Request
+      options: [Support a new database, Something ROUA misses or gets wrong on this database, I can test a preview engine (Snowflake or BigQuery), Managed-service notes (RDS, Cloud SQL, Atlas…)]
+    validations: { required: true }
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: How read-only access works there, what goes wrong, links to the vendor docs.

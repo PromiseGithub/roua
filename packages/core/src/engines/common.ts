@@ -190,6 +190,7 @@ export function header(title: string, spec: AccountSpec, now: Date, comment = "-
     ENGINE_INFO[spec.engine].support === "preview"
       ? `${c} PREVIEW: generated from vendor documentation, not yet tested against a live service. Review before running.`
       : `${c} Read it before you run it.`,
+    `${c} Problems or ideas? https://github.com/PromiseGithub/roua/issues`,
     "",
   ].join("\n");
 }
