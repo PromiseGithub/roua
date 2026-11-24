@@ -16,7 +16,7 @@ import {
   type Level,
   type PasswordSecret,
   type Profile,
-} from "@roua/core";
+} from "@roua-dev/core";
 import { formToConfig, type FormValues } from "./form.js";
 
 const $ = <T extends HTMLElement = HTMLInputElement>(id: string) => document.getElementById(id) as T;

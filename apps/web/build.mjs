@@ -18,7 +18,7 @@ const result = await build({
   minify: true,
   legalComments: "none",
   write: false,
-  alias: { "@roua/core": join(here, "../../packages/core/src/index.ts") },
+  alias: { "@roua-dev/core": join(here, "../../packages/core/src/index.ts") },
 });
 // Escape "</" so the bundle cannot close the <script> element early.
 const script = result.outputFiles[0].text.replace(/<\/(script)/gi, "<\\/$1").trimEnd();

@@ -1,5 +1,5 @@
 import pg from "pg";
-import type { Executor } from "@roua/core";
+import type { Executor } from "@roua-dev/core";
 
 export class UsageError extends Error {
   override name = "UsageError";

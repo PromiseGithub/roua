@@ -67,10 +67,10 @@ Best practice is to back a ROUA-App account with a ROUA-DB account at the databa
 
 ## 6. Reference implementation
 
-[`@roua/app`](../packages/app) provides the request policy plus adapters for Express/Connect, Fastify and the Fetch API (Next.js middleware, Hono, Cloudflare Workers, Deno, Bun):
+[`@roua-dev/app`](../packages/app) provides the request policy plus adapters for Express/Connect, Fastify and the Fetch API (Next.js middleware, Hono, Cloudflare Workers, Deno, Bun):
 
 ```ts
-import { rouaExpress } from "@roua/app";
+import { rouaExpress } from "@roua-dev/app";
 
 app.use(express.json());
 app.use(rouaExpress({

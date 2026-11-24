@@ -2,7 +2,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it, beforeAll } from "vitest";
-import { planPostgres, validateConfig, configToYaml } from "@roua/core";
+import { planPostgres, validateConfig, configToYaml } from "@roua-dev/core";
 import { parse } from "yaml";
 import { formToConfig, type FormValues } from "../src/form.js";
 

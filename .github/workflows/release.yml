@@ -1,0 +1,44 @@
+name: Release
+
+# Publishes @roua-dev/core, @roua-dev/app and @roua-dev/cli to npm with provenance.
+# Trigger: publish a GitHub release whose tag is v<version> (for example v0.1.0).
+# Needs the repository secret NPM_TOKEN (an npm granular token with publish
+# rights on the @roua-dev scope).
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - name: Check tag matches package versions
+        if: github.event_name == 'release'
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          for p in core app cli; do
+            v=$(node -p "require('./packages/$p/package.json').version")
+            [ "$v" = "$tag" ] || { echo "packages/$p is $v, tag is $tag"; exit 1; }
+          done
+      - name: Publish (core first, the CLI depends on it)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          for p in core app cli; do
+            npm publish -w packages/$p --provenance --access public
+          done

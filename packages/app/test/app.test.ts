@@ -7,7 +7,7 @@ import {
   rouaExpress,
   rouaFetchGuard,
   type RouaAppAccount,
-} from "@roua/app";
+} from "@roua-dev/app";
 
 const future = new Date(Date.now() + 86_400_000).toISOString();
 const demo: RouaAppAccount = { profile: "demo", mode: "read_only", expiresAt: future };

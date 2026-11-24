@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
 import { describe, expect, it } from "vitest";
-import { planPostgres, validateConfig } from "@roua/core";
+import { planPostgres, validateConfig } from "@roua-dev/core";
 
 const dir = fileURLToPath(new URL("../../../examples/", import.meta.url));
 // The examples are dated around the 0.1 release; validate them as of that day.

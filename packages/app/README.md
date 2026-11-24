@@ -1,4 +1,4 @@
-# @roua/app
+# @roua-dev/app
 
 Request guards for [ROUA-App](https://github.com/PromiseGithub/roua/blob/main/docs/ROUA-APP.md) accounts: logins for demos, app-store review and AI agents that can try every feature without consequence.
 

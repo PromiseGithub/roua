@@ -21,7 +21,7 @@ import {
   type PasswordSecret,
   type Profile,
   type Level,
-} from "@roua/core";
+} from "@roua-dev/core";
 import { connect, redactUrl, urlForUser, urlFromEnv, UsageError } from "./db.js";
 import { loadConfig } from "./config-file.js";
 

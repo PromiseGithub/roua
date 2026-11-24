@@ -25,7 +25,7 @@ npm test
 
 - **Never weaken a MUST** from the spec in code. If a database cannot enforce something natively, use a documented fallback and report a warning.
 - **Escaping is security-critical.** Every name and value that reaches SQL goes through `packages/core/src/escape.ts`. Add tests for any new input.
-- **Keep `@roua/core` pure:** no I/O and no runtime dependencies. The same code runs in the browser.
+- **Keep `@roua-dev/core` pure:** no I/O and no runtime dependencies. The same code runs in the browser.
 - **Never log or persist secrets.**
 - Generated SQL must stay deterministic for the same input, because the web generator and the CLI must produce the same script.
 - Add a test for every bug fix, ideally one that runs against a real PostgreSQL engine.

@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { parse } from "yaml";
-import { validateConfig, type RouaConfig } from "@roua/core";
+import { validateConfig, type RouaConfig } from "@roua-dev/core";
 import { UsageError } from "./db.js";
 
 export function loadConfig(path: string, now = new Date()): { config: RouaConfig; warnings: string[] } {

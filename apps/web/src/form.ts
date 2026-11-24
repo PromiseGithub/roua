@@ -2,7 +2,7 @@
  * Pure mapping from the generator form to a roua.yaml config object.
  * Kept separate from the DOM so it can be unit-tested.
  */
-import type { Level, MaskFunction, Profile, RouaConfig } from "@roua/core";
+import type { Level, MaskFunction, Profile, RouaConfig } from "@roua-dev/core";
 
 export interface FormValues {
   name: string;

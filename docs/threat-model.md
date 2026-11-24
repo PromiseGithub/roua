@@ -27,7 +27,7 @@
 | Denial of service (long queries, many connections, locks) | Statement timeout, lock timeout, idle timeout, connection limit | R3, C1 |
 | `NOTIFY` used to trigger applications that LISTEN | Cannot be blocked by privileges; reported. Listeners must not trust the sender. | P3 |
 | Web generator leaking the password | One static file; CSP `connect-src 'none'`, `default-src 'none'`, hashed inline code; build fails if network APIs appear | Web test I15 |
-| Supply chain | `@roua/core` has zero runtime dependencies; CLI depends only on `pg` and `yaml`; `npm audit` in CI | CI |
+| Supply chain | `@roua-dev/core` has zero runtime dependencies; CLI depends only on `pg` and `yaml`; `npm audit` in CI | CI |
 
 ## Known limits
 

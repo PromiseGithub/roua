@@ -10,7 +10,7 @@ ROUA (*Read-Only User Account*) is an open standard and toolkit for accounts you
 
 ```console
 $ export ADMIN_DATABASE_URL=postgres://admin@db.internal/appdb
-$ npx @roua/cli audit --role readonly
+$ npx @roua-dev/cli audit --role readonly
 
 ROUA audit: role readonly (PostgreSQL 16)
 
@@ -35,10 +35,10 @@ No Node.js? The same checks ship as plain SQL: `psql "$ADMIN_DATABASE_URL" -v ro
 ## Create one properly
 
 ```console
-$ npx @roua/cli init --profile agent --name roua_agent_docs --database appdb
-$ npx @roua/cli plan            # prints the SQL; changes nothing
-$ npx @roua/cli apply           # one transaction, then logs in AS the account and proves it
-$ npx @roua/cli revoke roua_agent_docs
+$ npx @roua-dev/cli init --profile agent --name roua_agent_docs --database appdb
+$ npx @roua-dev/cli plan            # prints the SQL; changes nothing
+$ npx @roua-dev/cli apply           # one transaction, then logs in AS the account and proves it
+$ npx @roua-dev/cli revoke roua_agent_docs
 ```
 
 `apply` generates a strong password, writes only a SCRAM-SHA-256 verifier into the SQL, applies everything in one transaction, then connects **as the new account**. It reruns the audit and attempts real writes and DDL, which PostgreSQL must refuse. Only then does it show the password, once.
@@ -67,7 +67,7 @@ Or use the **web generator**, online at https://kaizam.com or built locally as `
 Reviewers and prospects need to *use* the app, not just look at it. The companion [ROUA-App](docs/ROUA-APP.md) spec defines accounts that can try every feature without consequence. In `read_only` mode writes are refused. In `sandbox` mode writes go to a resettable sandbox with payments in test mode and messages sent to a sink. In both modes, routes for identity, credentials, money, outbound messages and bulk exports stay blocked.
 
 ```ts
-import { rouaExpress } from "@roua/app";
+import { rouaExpress } from "@roua-dev/app";
 
 app.use(express.json());
 app.use(rouaExpress({ getAccount: (req) => req.user?.roua, readPostAllowlist: [/^\/api\/search$/] }));

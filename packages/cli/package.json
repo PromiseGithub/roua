@@ -1,15 +1,49 @@
 {
-  "name": "@roua/cli",
+  "name": "@roua-dev/cli",
   "version": "0.1.0",
   "description": "roua: audit, verify, create and revoke read-only PostgreSQL accounts",
   "license": "Apache-2.0",
+  "author": "Promise Okoroji (https://github.com/PromiseGithub)",
+  "homepage": "https://kaizam.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PromiseGithub/roua.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/PromiseGithub/roua/issues"
+  },
+  "keywords": [
+    "postgres",
+    "postgresql",
+    "read-only",
+    "security",
+    "audit",
+    "cli",
+    "ai-agents",
+    "least-privilege"
+  ],
   "type": "module",
-  "bin": { "roua": "dist/bin.js" },
+  "bin": {
+    "roua": "dist/bin.js"
+  },
   "main": "dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
   "dependencies": {
-    "@roua/core": "0.1.0",
+    "@roua-dev/core": "0.1.0",
     "pg": "^8.13.0",
     "yaml": "^2.6.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }

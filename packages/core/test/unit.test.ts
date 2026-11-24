@@ -13,7 +13,7 @@ import {
   scramSha256Verifier,
   validateConfig,
   type RouaConfig,
-} from "@roua/core";
+} from "@roua-dev/core";
 
 const NOW = new Date("2026-11-23T12:00:00Z");
 

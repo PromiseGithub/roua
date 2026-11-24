@@ -16,7 +16,7 @@ import {
   verifyCurrentUser,
   type Executor,
   type RouaConfig,
-} from "@roua/core";
+} from "@roua-dev/core";
 
 const NOW = new Date();
 const IN_30_DAYS = new Date(NOW.getTime() + 30 * 86_400_000).toISOString();

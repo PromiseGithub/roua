@@ -1,12 +1,48 @@
 {
-  "name": "@roua/core",
+  "name": "@roua-dev/core",
   "version": "0.1.0",
   "description": "ROUA planner and auditor: pure, zero-dependency, runs in Node and the browser",
   "license": "Apache-2.0",
+  "author": "Promise Okoroji (https://github.com/PromiseGithub)",
+  "homepage": "https://kaizam.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PromiseGithub/roua.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/PromiseGithub/roua/issues"
+  },
+  "keywords": [
+    "postgres",
+    "postgresql",
+    "read-only",
+    "security",
+    "audit",
+    "ai-agents",
+    "least-privilege"
+  ],
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "exports": { ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" } },
-  "files": ["dist"],
-  "sideEffects": false
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
 }

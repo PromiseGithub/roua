@@ -15,7 +15,7 @@ First public draft.
 - New tables never become readable automatically.
 
 **Tools**
-- `@roua/core`: PostgreSQL planner, auditor and verifier, plus SCRAM-SHA-256 verifiers. Zero runtime dependencies.
-- `@roua/cli`: `audit`, `verify`, `init`, `plan`, `apply`, `revoke`, `list`, `expire`.
-- `@roua/app`: request policy with Express, Fastify and Fetch API adapters.
+- `@roua-dev/core`: PostgreSQL planner, auditor and verifier, plus SCRAM-SHA-256 verifiers. Zero runtime dependencies.
+- `@roua-dev/cli`: `audit`, `verify`, `init`, `plan`, `apply`, `revoke`, `list`, `expire`.
+- `@roua-dev/app`: request policy with Express, Fastify and Fetch API adapters.
 - Offline single-file web generator.

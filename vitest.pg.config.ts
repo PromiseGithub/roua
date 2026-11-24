@@ -8,8 +8,8 @@ const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 export default defineConfig({
   resolve: {
     alias: {
-      "@roua/core": r("./packages/core/src/index.ts"),
-      "@roua/app": r("./packages/app/src/index.ts"),
+      "@roua-dev/core": r("./packages/core/src/index.ts"),
+      "@roua-dev/app": r("./packages/app/src/index.ts"),
     },
   },
   test: {

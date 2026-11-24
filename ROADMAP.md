@@ -7,7 +7,7 @@ ROUA grows by being useful, not by covering everything at once. An engine is add
 - [x] Spec 0.1 draft: definition, profiles, levels L0 to L5, secrets, metadata, lifecycle, verification checks
 - [x] PostgreSQL 13+: `audit`, `verify`, `plan`, `apply`, `revoke`, `list`, `expire`, `init`
 - [x] Offline single-file web generator
-- [x] ROUA-App companion draft and `@roua/app` (Express, Fastify, Fetch API)
+- [x] ROUA-App companion draft and `@roua-dev/app` (Express, Fastify, Fetch API)
 - [x] End-to-end tests on PGlite; CI on PostgreSQL 13 to 17
 
 ## Next
