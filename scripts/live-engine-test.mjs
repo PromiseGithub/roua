@@ -294,7 +294,7 @@ COMMIT;
     const plan = planEngine(spec(), new Date());
     for (const i of [1, 2]) {
       const r = admin(file(plan, "setup"));
-      check(`setup run ${i}`, r.ok && !/ERR (?!This Redis instance is not configured to use an ACL file)/.test(r.out), r.out);
+      check(`setup run ${i}`, r.ok && !/ERR (?!This (Redis|Valkey) instance is not configured to use an ACL file)/.test(r.out), r.out);
     }
     expectAllowed("GET app:greeting", asUser("GET", "app:greeting"));
     expectAllowed("HGETALL app:user:1", asUser("HGETALL", "app:user:1"));

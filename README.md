@@ -4,7 +4,7 @@
 
 ROUA (*Read-Only User Account*) is an open standard and toolkit for accounts you hand to an AI agent, a demo, an auditor or an app-store reviewer. These accounts can look at everything they should, change nothing, read no secrets, and expire on their own.
 
-> Spec **0.1 (draft)** · PostgreSQL 13+ · The term ROUA was coined by [Promise Okoroji](https://github.com/PromiseGithub).
+> Spec **0.1 (draft)** · PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Snowflake, BigQuery · The term ROUA was coined by [Promise Okoroji](https://github.com/PromiseGithub).
 
 ## Check the accounts you already have
 
@@ -43,7 +43,33 @@ $ npx @roua-dev/cli revoke roua_agent_docs
 
 `apply` generates a strong password, writes only a SCRAM-SHA-256 verifier into the SQL, applies everything in one transaction, then connects **as the new account**. It reruns the audit and attempts real writes and DDL, which PostgreSQL must refuse. Only then does it show the password, once.
 
-Or use the **web generator**, online at https://kaizam.com or built locally as `apps/web/dist/index.html`: a single HTML file that runs offline in your browser and makes no network requests. Enter a database name, an account name and a password, pick a profile and level, and download `setup.sql`, `audit.sql`, `revoke.sql` and `roua.yaml`.
+Or use the **web generator** at **https://kaizam.com** (also built locally as `apps/web/dist/index.html`): a single HTML file that runs offline in your browser and makes no network requests. Pick a database, describe the account, and download the setup, audit, revoke and clean-up scripts. It can also write an audit script for an account you already have.
+
+## Other databases
+
+PostgreSQL has the full toolkit. For eight more engines, `@roua-dev/core` and the web generator produce setup, audit, revoke and drop scripts that follow the same rules: start from nothing, read per object as it exists today (never database-wide or future grants), hide secret-looking columns where the engine allows it, deny writes, record an owner, and expire on their own.
+
+| Database | Support | How |
+|---|---|---|
+| MySQL 8.0, 8.4, 9 | Tested in CI | Per-table and per-column SELECT computed at setup; `caching_sha2_password` verifier; an event locks the account at expiry |
+| MariaDB 10.6, 10.11, 11.4 | Tested in CI | Same, with a native password hash and `MAX_STATEMENT_TIME` |
+| SQL Server 2022, Azure SQL | Tested in CI | Hashed login, per-object SELECT, database-wide DENY on every write, an Agent job disables the login at expiry |
+| Oracle 23ai (and 19c) | Tested in CI | `READ` (not SELECT, so no row locks) per table, a dedicated profile, a scheduler job locks the account at expiry |
+| MongoDB 6.0, 7.0, 8.0 | Tested in CI | A custom role with `find` on named collections only; no `$out`/`$merge`; Atlas notes |
+| Redis 7.2, 7.4, Valkey 8 | Tested in CI | ACL user with `+@read` on key patterns (`%R~`), no dangerous, admin, scripting or pub/sub commands, hashed password |
+| Snowflake | Preview | Rebuilt role with point-in-time SELECT, key-pair SERVICE user, no secondary roles, `DAYS_TO_EXPIRY` |
+| BigQuery | Preview | Service account with table-level Data Viewer; query rights end through an IAM condition |
+
+**Tested in CI** means every change runs the generated scripts with the engine's official client against a real server ([`engines.yml`](.github/workflows/engines.yml), [`scripts/live-engine-test.mjs`](scripts/live-engine-test.mjs)): it logs in as the account and proves that permitted reads work while writes, DDL, secret columns, excluded tables and tables created after setup are refused, that the audit passes, that expiry fires and that revoke cuts access. **Preview** engines are generated from vendor documentation and not yet run against a live service.
+
+```ts
+import { planEngine, auditScript } from "@roua-dev/core";
+
+const plan = planEngine({ engine: "mysql", name: "roua_agent_docs", profile: "agent", owner: "jane@example.com",
+  purpose: "Docs agent", expiresAt: "2027-02-01T00:00:00Z", mode: "scope", schemas: ["appdb"],
+  exclude: ["appdb.salaries"], password: process.env.ROUA_PASSWORD });
+plan.files; // setup.sql, audit.sql, revoke.sql, drop.sql
+```
 
 ## The standard in one table
 

@@ -35,3 +35,14 @@
 - **The secret detector reads names, not data.** A column named `notes` that contains passwords will not be detected. Use `columns_deny`.
 - **Superuser grants made later.** ROUA cannot stop an administrator from granting more privileges after setup. Re-run `roua verify` or `roua audit` on a schedule.
 - **Probes and statement triggers.** Write probes affect zero rows and are rolled back, but statement-level triggers still fire inside the rolled-back transaction when the account *can* write. Run `verify` against staging if that matters.
+
+## Engines other than PostgreSQL
+
+The generators for other engines apply the same rules with each engine's own tools. Where an engine cannot enforce a rule, the generated scripts say so and the audit reports it:
+
+- **MySQL and MariaDB:** MySQL 8 refuses `SELECT ... FOR UPDATE` without UPDATE, DELETE or LOCK TABLES. MariaDB allows locking reads with SELECT alone, so a MariaDB ROUA can hold row locks inside a transaction. MySQL has no per-account statement timeout. Expiry relies on the event scheduler, which MariaDB ships disabled (the audit checks it).
+- **SQL Server:** locking hints such as `UPDLOCK` need only SELECT, so a ROUA can hold locks within a transaction. Expiry needs SQL Server Agent (not in Express; must be enabled on Linux). Azure SQL Database contained users need the plaintext password in the setup script.
+- **Oracle:** there are no column-level read grants, so tables with hidden columns are skipped rather than partly exposed. The plaintext password is in the setup script. PUBLIC can execute network packages such as UTL_HTTP by default; the audit checks that no network ACL lets the account use them.
+- **MongoDB:** privileges cannot hide single fields; use views. There is no scheduler: expiry depends on you running revoke.js (the audit fails once the recorded expiry has passed). `$where` and `$function` run server-side JavaScript within read operations unless `security.javascriptEnabled` is false.
+- **Redis/Valkey:** there is no expiry for users; schedule revoke.redis. Key patterns apply to every logical database.
+- **Snowflake and BigQuery (preview):** every user can download what it can read (Snowflake's user stage, BigQuery's table export to storage it controls). Scope the account to what its holder may see. These scripts are not yet tested against live services.

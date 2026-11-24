@@ -2,6 +2,13 @@
 
 Notable changes to the ROUA specification and tools. The project uses semantic versioning. Before 1.0, minor versions may contain breaking changes.
 
+## Unreleased
+
+- New engines in `@roua-dev/core` and the web generator: MySQL, MariaDB, SQL Server and Azure SQL, Oracle, MongoDB and Redis/Valkey (tested in CI against real servers), plus Snowflake and BigQuery (preview). Each produces setup, audit, revoke and drop scripts.
+- `auditScript()` and the web page's "Check an account you already have" write an audit for any existing account on any engine.
+- Password verifiers instead of plaintext where engines accept them: MySQL caching_sha2_password, MariaDB native hash, SQL Server hashed logins, Redis SHA-256.
+- kaizam.com redesigned: one offline page for every engine, an account checker, guidance for AI agents and an FAQ.
+
 ## 0.1.1 (2026-11-24)
 
 No changes to the specification or to tool behaviour.
