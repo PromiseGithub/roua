@@ -1,0 +1,30 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.PromiseGithub/roua",
+  "title": "ROUA: read-only database accounts",
+  "description": "Create and audit read-only database accounts for AI agents: PostgreSQL, MySQL, SQL Server and more.",
+  "websiteUrl": "https://kaizam.com",
+  "repository": {
+    "url": "https://github.com/PromiseGithub/roua",
+    "source": "github"
+  },
+  "version": "0.3.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@roua-dev/cli",
+      "version": "0.3.0",
+      "transport": { "type": "stdio" },
+      "packageArguments": [{ "type": "positional", "value": "mcp" }],
+      "environmentVariables": [
+        {
+          "name": "ADMIN_DATABASE_URL",
+          "description": "Optional PostgreSQL admin connection string for the live, read-only audit tool.",
+          "isRequired": false,
+          "isSecret": true,
+          "format": "string"
+        }
+      ]
+    }
+  ]
+}

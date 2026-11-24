@@ -71,6 +71,33 @@ const plan = planEngine({ engine: "mysql", name: "roua_agent_docs", profile: "ag
 plan.files; // setup.sql, audit.sql, revoke.sql, drop.sql
 ```
 
+## In CI: the GitHub Action
+
+```yaml
+- uses: PromiseGithub/roua@v0.3.0
+  env:
+    ADMIN_DATABASE_URL: ${{ secrets.ADMIN_DATABASE_URL }}
+  with:
+    roles: readonly reporting_ro     # or: all: true
+    fail-on: fail                    # fail | warn | never
+```
+
+The step fails when a role can write, read secrets or never expires, and writes a summary table and annotations. Outputs: `ok` and `report` (JSON).
+
+## For AI agents: the MCP server
+
+```json
+{ "mcpServers": { "roua": { "command": "npx", "args": ["-y", "@roua-dev/cli", "mcp"] } } }
+```
+
+Tools: `list_engines`, `audit_script`, `generate_account_scripts` (writes scripts to a folder; passwords and keys go to owner-only files, never into the conversation) and `audit_postgres_role` (live and read-only; set `ADMIN_DATABASE_URL` in the server's environment). The server has no dependencies beyond the CLI's own. Registry name: `io.github.PromiseGithub/roua`.
+
+## Docker
+
+```console
+docker run --rm -e ADMIN_DATABASE_URL ghcr.io/promisegithub/roua audit --all
+```
+
 ## The standard in one table
 
 **Profiles** say why the account exists, and each has a maximum lifetime: `agent` 90 days, `demo` 30, `review` 45, `audit` 30, `support` 7, `training` 14, `analytics` 180, `custom` 365.
