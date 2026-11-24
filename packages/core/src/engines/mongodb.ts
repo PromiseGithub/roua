@@ -78,13 +78,15 @@ print("Expiry: MongoDB has no scheduler. Run revoke.js at " + ROUA.expiresAt + "
 const admin = db.getSiblingDB("admin");
 const user = ${js(spec.name)};
 const u = admin.getUser(user);
-if (u) {
+if (!u) {
+  print("ROUA: no user " + user + " (already removed?)");
+} else {
   if (u.roles.length) admin.revokeRolesFromUser(user, u.roles);
   // Replace the password with a random one nobody knows.
-  admin.updateUser(user, { pwd: require("crypto").randomBytes(32).toString("base64url") });
+  admin.updateUser(user, { pwd: UUID().toString("hex") + UUID().toString("hex") });
+  const k = admin.runCommand({ killAllSessions: [{ user, db: "admin" }] });
+  print("ROUA: " + user + " revoked: no roles, unknown password" + (k.ok ? ", sessions ended." : ". Could not end sessions: " + k.errmsg));
 }
-admin.runCommand({ killAllSessionsByPattern: [{ users: [{ user, db: "admin" }] }] });
-print("ROUA: " + user + " revoked.");
 `;
   const drop = `${header("drop.js: remove the account and its role (run revoke.js first).", spec, now, "//")}const admin = db.getSiblingDB("admin");
 admin.dropUser(${js(spec.name)});

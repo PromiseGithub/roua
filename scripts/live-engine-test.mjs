@@ -45,7 +45,7 @@ function copyIn(name, content) {
   if (!r.ok) throw new Error(`docker cp failed: ${r.out}`);
   return `/tmp/${name}`;
 }
-const ERR = /ERROR|ORA-\d|Msg \d+|denied|NOPERM|not authorized|Unauthorized|SP2-|failed|No permissions|permission/i;
+const ERR = /ERROR|ORA-\d|Msg \d+|denied|NOPERM|NOAUTH|WRONGPASS|not authorized|Unauthorized|SP2-|failed|No permissions|permission/i;
 function check(title, ok, detail = "") {
   console.log(`${ok ? "PASS" : "FAIL"}  ${title}${ok ? "" : `\n      ${detail.trim().split("\n").slice(0, 12).join("\n      ")}`}`);
   if (!ok) failures++;

@@ -32,21 +32,25 @@ export function redisAclRules(spec: AccountSpec): string {
 
 export function planRedis(spec: AccountSpec, now: Date): EnginePlan {
   const u = spec.name;
-  const setup = `${header("setup.redis: create or update the ROUA ACL user. Pipe it into redis-cli as an admin:", spec, now, "#")}# redis-cli -h HOST --user admin --askpass < setup.redis
-# Only the SHA-256 of the password is in this file.
-# Rules: read commands only, on the listed key patterns only; no channels; no dangerous, admin or scripting commands.
-ACL SETUSER ${u} reset
+  // redis-cli has no comment syntax: the header is printed with ECHO instead.
+  const echo = (title: string, extra: string[] = []) =>
+    [title, ...header("", spec, now, "").split("\n").slice(1).filter(Boolean), ...extra]
+      .map((l) => `ECHO "${l.replace(/["\\]/g, "'").trim()}"`)
+      .join("\n") + "\n";
+  const setup = `${echo("ROUA setup.redis: create or update the ROUA ACL user. Run: redis-cli -h HOST --user admin --askpass < setup.redis", [
+    "Only the SHA-256 of the password is in this file.",
+    "Rules: read commands only, on the listed key patterns only; no channels; no dangerous, admin or scripting commands.",
+  ])}ACL SETUSER ${u} reset
 ACL SETUSER ${u} ${redisAclRules(spec)}
 ACL GETUSER ${u}
-# Persist the ACL. Works when the server uses an aclfile; otherwise run CONFIG REWRITE if users live in redis.conf.
+ECHO "Saving the ACL. ACL SAVE fails if the server has no aclfile: then run CONFIG REWRITE if users live in redis.conf."
 ACL SAVE
 `;
-  const revoke = `${header("revoke.redis: disable the user now and disconnect it.", spec, now, "#")}# redis-cli -h HOST --user admin --askpass < revoke.redis
-ACL SETUSER ${u} off resetpass -@all
+  const revoke = `${echo("ROUA revoke.redis: disable the user now and disconnect it.")}ACL SETUSER ${u} off resetpass -@all
 CLIENT KILL USER ${u}
 ACL SAVE
 `;
-  const drop = `${header("drop.redis: delete the user (run revoke.redis first).", spec, now, "#")}ACL DELUSER ${u}
+  const drop = `${echo("ROUA drop.redis: delete the user (run revoke.redis first).")}ACL DELUSER ${u}
 ACL SAVE
 `;
   const sample = (spec.objects?.[0] ?? "roua:*").replace(/\*/g, "x").replace(/[{}]/g, "");

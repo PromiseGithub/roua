@@ -124,7 +124,8 @@ SET SESSION sql_mode = REPLACE(@@SESSION.sql_mode, 'NO_BACKSLASH_ESCAPES', '');
 SET SESSION time_zone = '+00:00';
 SET SESSION group_concat_max_len = 1048576;
 
-CREATE DATABASE IF NOT EXISTS roua_admin COMMENT 'ROUA bookkeeping. No ROUA account has access.';
+-- roua_admin holds bookkeeping, the revoke procedure and expiry events. No ROUA account has access.
+CREATE DATABASE IF NOT EXISTS roua_admin;
 CREATE TABLE IF NOT EXISTS roua_admin.accounts (
   user_name VARCHAR(80) NOT NULL,
   host VARCHAR(255) NOT NULL,

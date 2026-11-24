@@ -49,7 +49,15 @@ describe("web generator", () => {
       expect(csp).toContain("form-action 'none'");
       expect(csp).toMatch(/script-src 'sha256-[A-Za-z0-9+/=]+'/);
       expect(csp).not.toContain("unsafe");
-      expect(html).not.toMatch(/<script[^>]+src=|<link[^>]+href=|https?:\/\/(?!github\.com)/i);
+      expect(html).not.toMatch(/<script[^>]+src=|<link[^>]+href=|<img[^>]+src=["']?https?:/i);
+      // Outbound links are fine (they load nothing); only these two hosts are linked.
+      const hosts = new Set([...html.matchAll(/href="https?:\/\/([^/"]+)/g)].map((m) => m[1]));
+      expect([...hosts].sort()).toEqual(["github.com", "www.npmjs.com"]);
+    });
+
+    it("offers every database and the account check", () => {
+      const html = readFileSync(dist, "utf8");
+      for (const id of ["engines", "checkForm", "dbTable", "generator", "check", "faq"]) expect(html).toContain(`id="${id}"`);
     });
   });
 });

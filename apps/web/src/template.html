@@ -5,125 +5,356 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="__CSP__">
 <meta name="referrer" content="no-referrer">
-<title>ROUA generator: read-only PostgreSQL accounts</title>
+<meta name="description" content="Create and check read-only database accounts for AI agents, demos, auditors and app reviewers. PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Snowflake and BigQuery. Free, open source, runs in your browser.">
+<title>ROUA: read-only database accounts you can prove</title>
 <style>__STYLE__</style>
 </head>
 <body>
-<header class="top">
-  <div class="wrap">
-    <h1>ROUA <span>Read-Only User Account generator</span></h1>
-    <p class="lede">Create a PostgreSQL account that can look at everything it should and change nothing.
-      For AI agents, demos, auditors and app reviewers.</p>
-    <p class="privacy" role="note"><strong>Your password never leaves this page.</strong>
-      Everything runs in your browser. This file makes no network requests and can be used offline.</p>
+<a class="skip" href="#generator">Skip to the generator</a>
+<header class="nav">
+  <div class="wrap navrow">
+    <a class="brand" href="#top" aria-label="ROUA home"><span class="mark" aria-hidden="true">R</span>ROUA</a>
+    <nav aria-label="Sections">
+      <a href="#generator">Create</a>
+      <a href="#check">Check</a>
+      <a href="#databases">Databases</a>
+      <a href="#agents">AI agents</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/PromiseGithub/roua" rel="noopener">GitHub</a>
+    </nav>
   </div>
 </header>
 
-<main class="wrap grid">
-<form id="form" autocomplete="off" novalidate>
-  <fieldset>
-    <legend>Account</legend>
-    <label>Account name <input id="name" value="roua_agent_docs" spellcheck="false" required>
-      <small>Lowercase letters, digits and _. Convention: roua_&lt;profile&gt;_&lt;label&gt;</small></label>
-    <div class="row">
-      <label>Profile (why it exists) <select id="profile"></select></label>
-      <label>Level (what it can see) <select id="level"></select></label>
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">ROUA · Read-Only User Account · open standard</p>
+    <h1>Read-only database access you can prove.</h1>
+    <p class="lede">Give a database to an AI agent, a demo, an auditor or an app reviewer. ROUA makes sure the account
+      <strong>changes nothing</strong>, <strong>never reads secrets</strong> and <strong>switches itself off</strong>, and then checks that it really does.</p>
+    <div class="cta">
+      <a class="btn primary" href="#generator">Create a read-only account</a>
+      <a class="btn" href="#check">Check an account you already have</a>
     </div>
-    <p id="levelHelp" class="help"></p>
-    <label>Owner (accountable person) <input id="owner" value="you@example.com" spellcheck="false"></label>
-    <label>Purpose <input id="purpose" value="AI assistant learning our data model" maxlength="200"></label>
-    <div class="row">
-      <label>Approved by <input id="approvedBy" placeholder="cto@example.com" spellcheck="false">
-        <small>Comma-separated. L5 needs two.</small></label>
-      <label>Approval reference <input id="approvalRef" placeholder="TICKET-123" spellcheck="false"></label>
-    </div>
-    <div class="row">
-      <label>Expires (UTC) <input id="expiresDate" type="date"></label>
-      <label id="expiresTimeWrap" hidden>Time (UTC) <input id="expiresTime" type="time" value="18:00"></label>
-    </div>
-    <p id="expiryHelp" class="help"></p>
-  </fieldset>
+    <ul class="facts">
+      <li>9 databases</li>
+      <li>Runs entirely in your browser</li>
+      <li>No sign-up, no tracking, no network requests</li>
+      <li>Free and open source</li>
+    </ul>
+  </div>
+</section>
 
-  <fieldset>
-    <legend>Database</legend>
-    <div class="row">
-      <label>Database name <input id="database" value="appdb" spellcheck="false"></label>
-      <label>Table owner role <input id="objectOwner" placeholder="app_owner" spellcheck="false">
-        <small>Owns your tables; owns masked views at L4.</small></label>
+<section class="band">
+  <div class="wrap">
+    <h2>Most “read-only” accounts aren’t.</h2>
+    <div class="cards three">
+      <article class="card">
+        <h3>Hidden write paths</h3>
+        <p>A role it inherits, a table it owns, a procedure it can run, a default grant: any one of them turns “read-only” into read-write.</p>
+      </article>
+      <article class="card">
+        <h3>Secrets in plain sight</h3>
+        <p>Password hashes, API tokens, card numbers and MFA seeds sit in ordinary columns that a plain SELECT can read.</p>
+      </article>
+      <article class="card">
+        <h3>Never switched off</h3>
+        <p>The demo ends, the contractor leaves, the agent is retired. The account stays, and forgotten accounts are where breaches start.</p>
+      </article>
     </div>
-    <label>Schemas <input id="schemas" value="public" spellcheck="false"></label>
-  </fieldset>
+  </div>
+</section>
 
-  <fieldset>
-    <legend>Scope</legend>
-    <label data-levels="L2 L4 L5">Include <input id="include" placeholder="public.* (default: every table in the schemas)" spellcheck="false"></label>
-    <label data-levels="L1 L2 L3 L4 L5">Exclude tables <input id="exclude" value="public.salaries public.api_keys" spellcheck="false">
-      <small>schema.table, * allowed. Space or comma separated.</small></label>
-    <label data-levels="L1">Public objects <input id="publicObjects" value="public.products public.categories" spellcheck="false"></label>
-    <label data-levels="L3">Aggregate views <input id="analyticsViews" value="public.sales_by_month" spellcheck="false"></label>
-    <label data-levels="L1 L2 L4 L5">Hide columns <input id="columnsDeny" placeholder="public.users.national_id" spellcheck="false">
-      <small>Secret-looking columns (password, token, api_key, mfa…) are hidden automatically. List anything the detector would miss.</small></label>
-    <label data-levels="L1 L2 L4 L5">Not secrets after all <input id="columnsAllow" placeholder="public.events.tokens_used" spellcheck="false">
-      <small>Columns the secret detector flags by mistake.</small></label>
-    <label data-levels="L4">Masking rules
-      <textarea id="mask" rows="4" spellcheck="false">public.users.email: email
-public.users.phone: partial_last4
-public.users.date_of_birth: year_only</textarea>
-      <small>One per line. Functions: email, partial_last4, redact, hash, year_only, initials.</small></label>
-  </fieldset>
-
-  <fieldset>
-    <legend>Limits and network</legend>
-    <div class="row">
-      <label>Max connections <input id="maxConnections" type="number" min="1" max="1000" value="5"></label>
-      <label>Statement timeout (s) <input id="statementTimeout" type="number" min="1" max="86400" value="30"></label>
-    </div>
-    <label>Allowed source IPs <input id="allowedSources" placeholder="10.0.0.0/24" spellcheck="false">
-      <small>Printed as pg_hba.conf lines to add.</small></label>
-    <label class="check"><input id="revokeTemp" type="checkbox"> Remove TEMP from PUBLIC (affects every role)</label>
-    <label class="check"><input id="revokePublicCreate" type="checkbox"> Remove CREATE on schema public from PUBLIC (needed on PostgreSQL 14 and older)</label>
-  </fieldset>
-
-  <fieldset>
-    <legend>Password</legend>
-    <div class="pw">
-      <input id="password" type="text" spellcheck="false" autocomplete="off" aria-label="Password">
-      <button type="button" id="regen">New</button>
-      <button type="button" id="copyPw">Copy</button>
-    </div>
-    <label class="check"><input id="plaintext" type="checkbox"> Put the plaintext password in the script (not recommended)</label>
-    <small>By default the script contains only a SCRAM-SHA-256 verifier, so the password is not in the file, the server log or query history.
-      Save the password in a password manager now; it is not stored anywhere.</small>
-  </fieldset>
-
-  <button type="submit" class="primary">Generate scripts</button>
-</form>
-
-<section class="output" aria-live="polite">
-  <div id="errors" class="errors" hidden></div>
-  <div id="result" hidden>
-    <div class="tabs" role="tablist" id="tabs"></div>
-    <pre id="code" tabindex="0"></pre>
-    <div class="actions">
-      <button type="button" id="copy">Copy</button>
-      <button type="button" id="download">Download this file</button>
-      <button type="button" id="downloadAll">Download all</button>
-    </div>
-    <div id="notes"></div>
-    <ol class="steps">
-      <li>Read <b>setup.sql</b>, then run it as a superuser: <code>psql "$ADMIN_URL" -f setup.sql</code></li>
-      <li>Check it: run <b>audit.sql</b> as admin, or <code>roua verify</code> as the new account. Every check should pass.</li>
-      <li>Hand over the password once, through a password manager. Never by email or chat.</li>
-      <li>When the work is done, run <b>revoke.sql</b>.</li>
+<section>
+  <div class="wrap">
+    <h2>What every ROUA guarantees, on every database</h2>
+    <ol class="rules">
+      <li><b>No write path of any kind.</b> No writes, no schema changes, no procedures, no ownership, no roles that could add them.</li>
+      <li><b>Never reads secrets.</b> Secret-looking columns are hidden automatically; you add anything the detector misses.</li>
+      <li><b>An owner and an expiry.</b> Every account names who is accountable and switches itself off on a date.</li>
+      <li><b>Instant revoke.</b> One script locks the account and ends its open sessions.</li>
+      <li><b>Checked before handover.</b> An audit script proves all of the above. Run it any time, on any account.</li>
     </ol>
   </div>
-  <div id="empty" class="empty">Fill in the form and choose <b>Generate scripts</b>.</div>
+</section>
+
+<section id="generator" class="band">
+  <div class="wrap">
+    <h2>Create a read-only account</h2>
+    <p class="sub">Pick your database, describe the account, and download the scripts. Your password never leaves this page.</p>
+
+    <h3 class="step">1. Choose your database</h3>
+    <div class="engines" id="engines" role="radiogroup" aria-label="Database"></div>
+
+    <h3 class="step">2. Describe the account</h3>
+    <div class="grid">
+    <form id="form" autocomplete="off" novalidate>
+      <fieldset>
+        <legend>Account</legend>
+        <label>Account name <input id="name" value="roua_agent_docs" spellcheck="false" required>
+          <small>Lowercase letters, digits and _. Convention: roua_&lt;profile&gt;_&lt;label&gt;</small></label>
+        <div class="row">
+          <label>Who is it for? <select id="profile"></select></label>
+          <label data-engines="postgresql">Level (what it can see) <select id="level"></select></label>
+          <label data-engines="others">What can it read?
+            <select id="mode">
+              <option value="scope">Everything in scope, minus exclusions</option>
+              <option value="listed">Only what I list</option>
+            </select></label>
+        </div>
+        <p id="levelHelp" class="help"></p>
+        <label>Owner (accountable person) <input id="owner" value="you@example.com" spellcheck="false"></label>
+        <label>Purpose <input id="purpose" value="AI assistant learning our data model" maxlength="200"></label>
+        <div class="row">
+          <label>Approved by <input id="approvedBy" placeholder="cto@example.com" spellcheck="false">
+            <small>Comma-separated. PostgreSQL L5 needs two.</small></label>
+          <label>Approval reference <input id="approvalRef" placeholder="TICKET-123" spellcheck="false"></label>
+        </div>
+        <div class="row">
+          <label>Expires (UTC) <input id="expiresDate" type="date"></label>
+          <label id="expiresTimeWrap" hidden>Time (UTC) <input id="expiresTime" type="time" value="18:00"></label>
+        </div>
+        <p id="expiryHelp" class="help"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend id="dbLegend">Database</legend>
+        <div class="row">
+          <label id="databaseWrap"><span id="databaseLabel">Database</span> <input id="database" value="appdb" spellcheck="false"></label>
+          <label data-engines="postgresql">Table owner role <input id="objectOwner" placeholder="app_owner" spellcheck="false">
+            <small>Owns your tables; owns masked views at L4.</small></label>
+          <label data-engines="snowflake">Warehouse <input id="warehouse" value="ROUA_WH" spellcheck="false"></label>
+          <label data-engines="bigquery">Location <input id="location" value="US" spellcheck="false"></label>
+        </div>
+        <label id="schemasWrap"><span id="schemasLabel">Schemas</span> <input id="schemas" value="public" spellcheck="false">
+          <small id="schemasHelp">Space or comma separated.</small></label>
+        <label class="check" data-engines="sqlserver"><input id="contained" type="checkbox"> Azure SQL Database (contained user, no login)</label>
+        <label class="check" data-engines="redis"><input id="redis7" type="checkbox" checked> Redis 7 or newer / Valkey (read-only key permissions)</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Scope</legend>
+        <label data-engines="postgresql" data-levels="L2 L4 L5">Include <input id="include" placeholder="public.* (default: every table in the schemas)" spellcheck="false"></label>
+        <label id="objectsWrap"><span id="objectsLabel">Tables</span> <input id="objects" spellcheck="false">
+          <small id="objectsHelp">schema.table, * allowed.</small></label>
+        <label id="excludeWrap"><span id="excludeLabel">Exclude tables</span> <input id="exclude" value="public.salaries public.api_keys" spellcheck="false">
+          <small id="excludeHelp">schema.table, * allowed. Space or comma separated.</small></label>
+        <label data-engines="postgresql" data-levels="L1">Public objects <input id="publicObjects" value="public.products public.categories" spellcheck="false"></label>
+        <label data-engines="postgresql" data-levels="L3">Aggregate views <input id="analyticsViews" value="public.sales_by_month" spellcheck="false"></label>
+        <label id="columnsDenyWrap">Hide columns <input id="columnsDeny" placeholder="public.users.national_id" spellcheck="false">
+          <small>Secret-looking columns (password, token, api_key, mfa…) are hidden automatically. List anything the detector would miss.</small></label>
+        <label id="columnsAllowWrap">Not secrets after all <input id="columnsAllow" placeholder="public.events.tokens_used" spellcheck="false">
+          <small>Columns the secret detector flags by mistake.</small></label>
+        <label data-engines="postgresql" data-levels="L4">Masking rules
+          <textarea id="mask" rows="4" spellcheck="false">public.users.email: email
+public.users.phone: partial_last4
+public.users.date_of_birth: year_only</textarea>
+          <small>One per line. Functions: email, partial_last4, redact, hash, year_only, initials.</small></label>
+        <p id="scopeNote" class="help"></p>
+      </fieldset>
+
+      <fieldset id="limitsSet">
+        <legend>Limits and network</legend>
+        <div class="row">
+          <label id="maxConnectionsWrap">Max connections <input id="maxConnections" type="number" min="1" max="1000" value="5"></label>
+          <label id="statementTimeoutWrap">Statement timeout (s) <input id="statementTimeout" type="number" min="1" max="86400" value="30"></label>
+        </div>
+        <label id="allowedSourcesWrap"><span id="allowedSourcesLabel">Allowed source IPs</span> <input id="allowedSources" placeholder="10.0.0.0/24" spellcheck="false">
+          <small id="allowedSourcesHelp">Printed as pg_hba.conf lines to add.</small></label>
+        <label class="check" data-engines="mysql mariadb"><input id="requireTls" type="checkbox" checked> Require TLS</label>
+        <label class="check" data-engines="postgresql"><input id="revokeTemp" type="checkbox"> Remove TEMP from PUBLIC (affects every role)</label>
+        <label class="check" data-engines="postgresql"><input id="revokePublicCreate" type="checkbox"> Remove CREATE on schema public from PUBLIC (needed on PostgreSQL 14 and older)</label>
+      </fieldset>
+
+      <fieldset id="pwSet">
+        <legend>Sign-in</legend>
+        <div id="pwBlock">
+          <div class="pw">
+            <input id="password" type="text" spellcheck="false" autocomplete="off" aria-label="Password">
+            <button type="button" id="regen">New</button>
+            <button type="button" id="copyPw">Copy</button>
+          </div>
+          <label class="check" data-engines="postgresql"><input id="plaintext" type="checkbox"> Put the plaintext password in the script (not recommended)</label>
+          <small id="pwHelp"></small>
+        </div>
+        <div id="keyBlock" hidden>
+          <label>RSA public key <textarea id="publicKey" rows="4" spellcheck="false" placeholder="-----BEGIN PUBLIC KEY----- …"></textarea></label>
+          <div class="actions"><button type="button" id="genKey">Generate key pair</button><button type="button" id="dlKey" hidden>Download private key</button></div>
+          <small>Snowflake service users sign in with a key pair, not a password. Generate one here (the private key never leaves your browser) or paste the public key of one you made with openssl.</small>
+        </div>
+        <div id="noneBlock" hidden>
+          <small>No password: the account is a service account. Let the person or agent who will use it impersonate it until the expiry (set HOLDER when you run setup.sh), so no key file ever exists.</small>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="btn primary wide">Generate scripts</button>
+    </form>
+
+    <section class="output" aria-live="polite" aria-label="Generated scripts">
+      <div id="errors" class="errors" hidden></div>
+      <div id="result" hidden>
+        <div class="tabs" role="tablist" id="tabs"></div>
+        <pre id="code" tabindex="0"></pre>
+        <p class="run" id="run"></p>
+        <div class="actions">
+          <button type="button" id="copy">Copy</button>
+          <button type="button" id="download">Download this file</button>
+          <button type="button" id="downloadAll">Download all</button>
+        </div>
+        <div id="notes"></div>
+        <ol class="steps">
+          <li>Read <b id="setupName">setup</b>, then run it as an administrator.</li>
+          <li>Run the <b>audit</b> script. Every check should pass.</li>
+          <li>Hand over the credentials once, through a password manager or secrets store. Never by email or chat.</li>
+          <li>It switches itself off at the expiry. To end it sooner, run <b>revoke</b>.</li>
+        </ol>
+      </div>
+      <div id="empty" class="empty">
+        <p><b>Your scripts appear here.</b></p>
+        <p>You get a setup script, an audit script that proves the account is read-only, a revoke script, and a clean-up script.</p>
+      </div>
+    </section>
+    </div>
+  </div>
+</section>
+
+<section id="check">
+  <div class="wrap">
+    <h2>Check an account you already have</h2>
+    <p class="sub">Is your “readonly” user actually read-only? Get an audit script for any existing account. It only reads, so it is safe to run on production.</p>
+    <div class="grid narrow">
+      <form id="checkForm" autocomplete="off" novalidate>
+        <fieldset>
+          <legend>Account to check</legend>
+          <label>Database <select id="cEngine"></select></label>
+          <label>Account, role or user name <input id="cName" value="readonly" spellcheck="false"></label>
+          <label data-cengines="mysql mariadb">Host <input id="cHost" value="%" spellcheck="false"><small>As in 'user'@'host'.</small></label>
+          <label data-cengines="sqlserver bigquery mongodb"><span id="cDbLabel">Database</span> <input id="cDatabase" value="appdb" spellcheck="false"></label>
+          <label data-cengines="snowflake">Role to inspect <input id="cRole" placeholder="NAME_READ" spellcheck="false"></label>
+          <label data-cengines="bigquery">Location <input id="cLocation" value="US" spellcheck="false"></label>
+          <label class="check" data-cengines="sqlserver"><input id="cContained" type="checkbox"> Contained user (Azure SQL Database)</label>
+          <button type="submit" class="btn primary wide">Get the audit script</button>
+        </fieldset>
+        <p class="help" id="cHint"></p>
+      </form>
+      <section class="output" aria-live="polite" aria-label="Audit script">
+        <div id="cErrors" class="errors" hidden></div>
+        <div id="cResult" hidden>
+          <pre id="cCode" tabindex="0"></pre>
+          <p class="run" id="cRun"></p>
+          <div class="actions">
+            <button type="button" id="cCopy">Copy</button>
+            <button type="button" id="cDownload">Download</button>
+          </div>
+        </div>
+        <div id="cEmpty" class="empty"><p>Choose a database and an account name, then <b>Get the audit script</b>.</p>
+          <p>It checks for write privileges, inherited roles, ownership, secret columns, missing expiry and more, with one PASS, WARN or FAIL line per check.</p></div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<section id="databases" class="band">
+  <div class="wrap">
+    <h2>Supported databases</h2>
+    <p class="sub"><b>Full</b>: complete toolkit with the <code>roua</code> CLI, masking and live verification.
+      <b>Tested</b>: every change runs the generated scripts against the real engine in CI, logs in as the account and proves writes fail.
+      <b>Preview</b>: built from the vendor’s documentation and not yet run against a live service; review before use, and tell us what breaks.</p>
+    <div class="tablewrap"><table class="dbtable" id="dbTable">
+      <thead><tr><th scope="col">Database</th><th scope="col">Support</th><th scope="col">Versions</th><th scope="col">How ROUA works there</th><th scope="col">Also covers</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="agents">
+  <div class="wrap">
+    <h2>Giving an AI agent database access</h2>
+    <div class="cards two">
+      <article class="card">
+        <h3>Three steps</h3>
+        <ol>
+          <li>Create a ROUA above with the <b>AI agent</b> profile. Leave out tables the agent has no business seeing.</li>
+          <li>Put its connection string in the agent’s environment or MCP server configuration, never in a prompt or a repository.</li>
+          <li>Let the agent explore, query and explain. If it tries to change anything, the database refuses.</li>
+        </ol>
+        <pre class="snippet">{
+  "mcpServers": {
+    "database": {
+      "command": "your-database-mcp-server",
+      "env": { "DATABASE_URL": "postgres://roua_agent_docs:<password>@db.internal/appdb" }
+    }
+  }
+}</pre>
+      </article>
+      <article class="card">
+        <h3>Know the limits</h3>
+        <ul>
+          <li><b>Read-only is not “nothing leaves”.</b> Anything the account can read, the agent can repeat. Scope it to what the agent should know.</li>
+          <li><b>Expensive queries are still possible.</b> Use the connection and time limits, and a small warehouse on cloud warehouses.</li>
+          <li><b>Applications need their own guard.</b> For demo and app-review accounts that click through your app, pair ROUA with <a href="https://github.com/PromiseGithub/roua/blob/main/docs/ROUA-APP.md" rel="noopener">ROUA-App</a>, which blocks writes at the API.</li>
+        </ul>
+      </article>
+    </div>
+    <h3 class="step">Who uses read-only accounts</h3>
+    <div class="cards three small">
+      <article class="card"><h3>AI agents</h3><p>Text-to-SQL, coding agents and MCP servers that learn your schema and answer questions.</p></article>
+      <article class="card"><h3>App review</h3><p>Store and marketplace reviewers who must try every feature without touching real data.</p></article>
+      <article class="card"><h3>Demos and training</h3><p>Sales demos and workshops on synthetic data, with accounts that expire after the event.</p></article>
+      <article class="card"><h3>Auditors</h3><p>Internal and external auditors who need to see, never to change, with masked personal data.</p></article>
+      <article class="card"><h3>Vendor support</h3><p>Short-lived access for a support session, revoked the moment it ends.</p></article>
+      <article class="card"><h3>BI and analytics</h3><p>Dashboards and analysts reading aggregates, with limits that keep costs predictable.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Profiles and levels</h2>
+    <div class="cards two">
+      <article class="card">
+        <h3>Profiles: why the account exists</h3>
+        <table class="mini" id="profileTable"><thead><tr><th scope="col">Profile</th><th scope="col">Max lifetime</th></tr></thead><tbody></tbody></table>
+      </article>
+      <article class="card">
+        <h3>Levels: what it can see</h3>
+        <table class="mini" id="levelTable"><thead><tr><th scope="col">Level</th><th scope="col">Can read</th></tr></thead><tbody></tbody></table>
+        <p class="help">All levels are available on PostgreSQL. Other databases offer L1 (only what you list) and L2 (everything in scope minus exclusions and secrets).</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap narrowtext">
+    <h2>Questions</h2>
+    <details><summary>Is it safe to type a password into this page?</summary>
+      <p>Yes. The page is a single file that runs entirely in your browser. Its security policy forbids every network request, so nothing you type can be sent anywhere. You can save the page and use it offline. Where the database accepts it, the scripts contain only a password hash (PostgreSQL, MySQL, MariaDB, SQL Server, Redis), never the password.</p></details>
+    <details><summary>Why not just use GRANT SELECT ON *.*, db_datareader or a built-in read role?</summary>
+      <p>Built-in read roles cover every table, including tables created next year, and they include tables full of secrets. They also leave whatever else the account inherited untouched. ROUA starts from nothing, grants read per table as it exists today, hides secret columns, denies writes explicitly where the database supports it, and adds an expiry.</p></details>
+    <details><summary>What happens when the account expires?</summary>
+      <p>PostgreSQL: the password stops working (VALID UNTIL), and <code>roua expire</code> ends open sessions. MySQL and MariaDB: a scheduled event locks the account and ends its sessions. SQL Server: an Agent job disables the login. Oracle: a scheduler job locks the account. Snowflake: DAYS_TO_EXPIRY. BigQuery: query rights end through an IAM condition. MongoDB and Redis have no scheduler, so you schedule the revoke script; the audit flags it if you forget.</p></details>
+    <details><summary>Does it work with managed databases?</summary>
+      <p>Yes, as long as you have an administrator account: Amazon RDS and Aurora, Google Cloud SQL and AlloyDB, Azure SQL and Azure Database, Supabase, Neon, Oracle Autonomous Database and others. Each database in the table above lists the services it covers. Some checks that need superuser (such as reading pg_hba.conf) report a warning instead.</p></details>
+    <details><summary>Does read-only stop data from leaving?</summary>
+      <p>No, and nothing that can read can promise that. Read-only means the account cannot change or destroy anything. Decide what it may see with the scope, the exclusions and, on PostgreSQL, masking.</p></details>
+    <details><summary>Can I use this in automation?</summary>
+      <p>On PostgreSQL, the <code>roua</code> CLI plans, applies, verifies and revokes accounts from a <code>roua.yaml</code> file: <code>npx @roua-dev/cli audit --role readonly</code>. For other databases, the generated scripts are plain files that you can keep in version control and run in a pipeline.</p></details>
+    <details><summary>Who is behind ROUA?</summary>
+      <p>The term ROUA (Read-Only User Account) was coined by Promise Okoroji. ROUA is an open standard (draft 0.1) with Apache-2.0 tools. Reviews of the spec, bug reports and attempts to break the audit are very welcome on <a href="https://github.com/PromiseGithub/roua" rel="noopener">GitHub</a>.</p></details>
+  </div>
 </section>
 </main>
 
-<footer class="wrap foot">
-  ROUA spec 0.1 (draft). The term ROUA was coined by Promise Okoroji.
-  Open source: github.com/PromiseGithub/roua. Build __BUILD__.
+<footer class="foot">
+  <div class="wrap footrow">
+    <p><b>ROUA</b> spec 0.1 (draft). The term ROUA was coined by Promise Okoroji.</p>
+    <p><a href="https://github.com/PromiseGithub/roua" rel="noopener">Source on GitHub</a> ·
+      <a href="https://github.com/PromiseGithub/roua/blob/main/SPEC.md" rel="noopener">Specification</a> ·
+      <a href="https://github.com/PromiseGithub/roua/security/advisories/new" rel="noopener">Report a vulnerability</a> ·
+      <a href="https://www.npmjs.com/package/@roua-dev/cli" rel="noopener">npm</a></p>
+    <p class="muted">This page is one self-contained file and makes no network requests. Build __BUILD__.</p>
+  </div>
 </footer>
 <script>__SCRIPT__</script>
 </body>
