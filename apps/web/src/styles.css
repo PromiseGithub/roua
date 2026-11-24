@@ -156,3 +156,14 @@ details p { color: var(--muted); margin: 0 0 14px; }
 .foot p { margin: 0 0 6px; }
 .muted { color: var(--muted); }
 [hidden] { display: none !important; }
+.pagebody h2 { margin-top: 8px; }
+.pagebody h2 + pre { margin-bottom: 12px; }
+.misses, .does { padding-left: 0; list-style: none; }
+.misses li, .does li { padding: 6px 0 6px 28px; position: relative; color: var(--muted); }
+.misses li::before { content: "✗"; position: absolute; left: 4px; color: var(--bad); font-weight: 700; }
+.does li::before { content: "✓"; position: absolute; left: 4px; color: var(--ok); font-weight: 700; }
+.misses b, .does b { color: var(--ink); }
+.footlinks { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 10px 0; }
+.footlinks a { color: var(--muted); text-decoration: none; }
+.footlinks a:hover { color: var(--accent); text-decoration: underline; }
+.dbtable td a { font-weight: 650; }

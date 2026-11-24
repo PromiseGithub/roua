@@ -5,15 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="__CSP__">
 <meta name="referrer" content="no-referrer">
-<meta name="description" content="Create and check read-only database accounts for AI agents, demos, auditors and app reviewers. PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Snowflake and BigQuery. Free, open source, runs in your browser.">
-<title>ROUA: read-only database accounts you can prove</title>
+<meta name="description" content="__DESCRIPTION__">
+<title>__TITLE__</title>
+<link rel="canonical" href="__CANONICAL__">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ROUA">
+<meta property="og:title" content="__TITLE__">
+<meta property="og:description" content="__DESCRIPTION__">
+<meta property="og:url" content="__CANONICAL__">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#1f5f99">
+<script type="application/ld+json">__JSONLD__</script>
 <style>__STYLE__</style>
 </head>
-<body>
+<body data-engine="__ENGINE__" data-profile="__PROFILE__">
 <a class="skip" href="#generator">Skip to the generator</a>
 <header class="nav">
   <div class="wrap navrow">
-    <a class="brand" href="#top" aria-label="ROUA home"><span class="mark" aria-hidden="true">R</span>ROUA</a>
+    <a class="brand" href="/" aria-label="ROUA home"><span class="mark" aria-hidden="true">R</span>ROUA</a>
     <nav aria-label="Sections">
       <a href="#generator">Create</a>
       <a href="#check">Check</a>
@@ -28,10 +37,9 @@
 <main id="top">
 <section class="hero">
   <div class="wrap">
-    <p class="eyebrow">ROUA · Read-Only User Account · open standard</p>
-    <h1>Read-only database access you can prove.</h1>
-    <p class="lede">Give a database to an AI agent, a demo, an auditor or an app reviewer. ROUA makes sure the account
-      <strong>changes nothing</strong>, <strong>never reads secrets</strong> and <strong>switches itself off</strong>, and then checks that it really does.</p>
+    <p class="eyebrow">__EYEBROW__</p>
+    <h1>__H1__</h1>
+    <p class="lede">__LEDE__</p>
     <div class="cta">
       <a class="btn primary" href="#generator">Create a read-only account</a>
       <a class="btn" href="#check">Check an account you already have</a>
@@ -44,7 +52,7 @@
     </ul>
   </div>
 </section>
-
+__PAGE_SECTION__
 <section class="band">
   <div class="wrap">
     <h2>Most “read-only” accounts aren’t.</h2>
@@ -339,7 +347,7 @@ public.users.date_of_birth: year_only</textarea>
     <details><summary>Does read-only stop data from leaving?</summary>
       <p>No, and nothing that can read can promise that. Read-only means the account cannot change or destroy anything. Decide what it may see with the scope, the exclusions and, on PostgreSQL, masking.</p></details>
     <details><summary>Can I use this in automation?</summary>
-      <p>On PostgreSQL, the <code>roua</code> CLI plans, applies, verifies and revokes accounts from a <code>roua.yaml</code> file: <code>npx @roua-dev/cli audit --role readonly</code>. For other databases, the generated scripts are plain files that you can keep in version control and run in a pipeline.</p></details>
+      <p>Yes. On PostgreSQL, the <code>roua</code> CLI plans, applies, verifies and revokes accounts from a <code>roua.yaml</code> file (<code>npx @roua-dev/cli audit --role readonly</code>), also as a Docker image (<code>ghcr.io/promisegithub/roua</code>). The <a href="https://github.com/PromiseGithub/roua#in-ci-the-github-action" rel="noopener">GitHub Action</a> fails a build when an account stops being read-only. AI agents can use the <a href="/ai-agents/">ROUA MCP server</a>. For other databases, the generated scripts are plain files you can keep in version control and run in a pipeline.</p></details>
     <details><summary>Who is behind ROUA?</summary>
       <p>The term ROUA (Read-Only User Account) was coined by Promise Okoroji. ROUA is an open standard (draft 0.1) with Apache-2.0 tools. Reviews of the spec, bug reports and attempts to break the audit are very welcome on <a href="https://github.com/PromiseGithub/roua" rel="noopener">GitHub</a>.</p></details>
   </div>
@@ -353,7 +361,8 @@ public.users.date_of_birth: year_only</textarea>
       <a href="https://github.com/PromiseGithub/roua/blob/main/SPEC.md" rel="noopener">Specification</a> ·
       <a href="https://github.com/PromiseGithub/roua/security/advisories/new" rel="noopener">Report a vulnerability</a> ·
       <a href="https://www.npmjs.com/package/@roua-dev/cli" rel="noopener">npm</a></p>
-    <p class="muted">This page is one self-contained file and makes no network requests. Build __BUILD__.</p>
+    <nav class="footlinks" aria-label="Pages">__FOOTER_LINKS__</nav>
+    <p class="muted">Each page is one self-contained file and makes no network requests. Build __BUILD__.</p>
   </div>
 </footer>
 <script>__SCRIPT__</script>

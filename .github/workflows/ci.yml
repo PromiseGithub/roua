@@ -52,3 +52,51 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run test:pg
+
+  action:
+    name: GitHub Action (roua audit)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      ADMIN_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsc -b packages/core packages/cli
+      - name: A sloppy "read-only" role
+        run: |
+          psql "$ADMIN_DATABASE_URL" -v ON_ERROR_STOP=1 <<'SQL'
+          CREATE TABLE orders (id int, api_token text);
+          CREATE ROLE sloppy LOGIN PASSWORD 'x';
+          GRANT SELECT, INSERT ON orders TO sloppy;
+          SQL
+      - id: audit
+        uses: ./
+        continue-on-error: true
+        with:
+          roles: sloppy
+          cli-path: packages/cli/dist/bin.js
+      - name: The action must fail and report ok=false
+        run: |
+          [ "${{ steps.audit.outcome }}" = "failure" ] || { echo "expected failure"; exit 1; }
+          [ "${{ steps.audit.outputs.ok }}" = "false" ] || { echo "expected ok=false"; exit 1; }
+          grep -q '"role": "sloppy"' "${{ steps.audit.outputs.report }}"
+      - id: report-only
+        uses: ./
+        with:
+          roles: sloppy
+          fail-on: never
+          cli-path: packages/cli/dist/bin.js
+      - run: '[ "${{ steps.report-only.outputs.ok }}" = "false" ]'

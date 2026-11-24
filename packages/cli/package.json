@@ -1,7 +1,8 @@
 {
   "name": "@roua-dev/cli",
-  "version": "0.2.0",
-  "description": "roua: audit, verify, create and revoke read-only PostgreSQL accounts",
+  "version": "0.3.0",
+  "mcpName": "io.github.PromiseGithub/roua",
+  "description": "roua: create, audit and verify read-only database accounts; includes an MCP server (roua mcp)",
   "license": "Apache-2.0",
   "author": "Promise Okoroji (https://github.com/PromiseGithub)",
   "homepage": "https://kaizam.com",
@@ -21,7 +22,10 @@
     "audit",
     "cli",
     "ai-agents",
-    "least-privilege"
+    "least-privilege",
+    "mcp",
+    "mcp-server",
+    "model-context-protocol"
   ],
   "type": "module",
   "bin": {
@@ -35,7 +39,7 @@
     "NOTICE"
   ],
   "dependencies": {
-    "@roua-dev/core": "0.2.0",
+    "@roua-dev/core": "0.3.0",
     "pg": "^8.13.0",
     "yaml": "^2.6.0"
   },

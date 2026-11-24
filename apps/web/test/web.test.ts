@@ -5,6 +5,8 @@ import { describe, expect, it, beforeAll } from "vitest";
 import { planPostgres, validateConfig, configToYaml } from "@roua-dev/core";
 import { parse } from "yaml";
 import { formToConfig, type FormValues } from "../src/form.js";
+// @ts-expect-error plain ES module without types
+import { PAGES, SITE } from "../src/pages.mjs";
 
 const NOW = new Date("2026-11-23T12:00:00Z");
 const form: FormValues = {
@@ -35,28 +37,54 @@ describe("web generator", () => {
     expect(errors[0]).toMatch(/Mask line 2/);
   });
 
-  describe("built page (I15)", () => {
-    const dist = fileURLToPath(new URL("../dist/index.html", import.meta.url));
+  describe("built site (I15)", () => {
+    const distDir = fileURLToPath(new URL("../dist/", import.meta.url));
+    const read = (rel: string) => readFileSync(distDir + rel, "utf8");
     beforeAll(() => {
-      if (!existsSync(dist)) execFileSync(process.execPath, [fileURLToPath(new URL("../build.mjs", import.meta.url))]);
+      if (!existsSync(distDir + "index.html")) execFileSync(process.execPath, [fileURLToPath(new URL("../build.mjs", import.meta.url))]);
     });
+    const pages = [...PAGES.map((p) => `${p.path}index.html`), "404.html"];
 
-    it("is one file with a CSP that forbids all network access and unhashed code", () => {
-      const html = readFileSync(dist, "utf8");
+    it.each(pages)("%s is self-contained, with a CSP that forbids all network access", (rel) => {
+      const html = read(rel);
       const csp = /http-equiv="Content-Security-Policy" content="([^"]+)"/.exec(html)?.[1] ?? "";
       expect(csp).toContain("default-src 'none'");
       expect(csp).toContain("connect-src 'none'");
       expect(csp).toContain("form-action 'none'");
       expect(csp).toMatch(/script-src 'sha256-[A-Za-z0-9+/=]+'/);
       expect(csp).not.toContain("unsafe");
-      expect(html).not.toMatch(/<script[^>]+src=|<link[^>]+href=|<img[^>]+src=["']?https?:/i);
-      // Outbound links are fine (they load nothing); only these two hosts are linked.
+      // Nothing is loaded from anywhere: no external scripts, styles, icons or images.
+      expect(html).not.toMatch(/<script[^>]+src=|<link(?![^>]*rel="canonical")[^>]*>|<img[^>]+src=["']?https?:|<iframe/i);
+      // Outbound links load nothing; only these hosts are linked.
       const hosts = new Set([...html.matchAll(/href="https?:\/\/([^/"]+)/g)].map((m) => m[1]));
-      expect([...hosts].sort()).toEqual(["github.com", "www.npmjs.com"]);
+      for (const h of hosts) expect(["github.com", "www.npmjs.com", "kaizam.com"]).toContain(h);
+      expect(html).not.toMatch(/__[A-Z_]+__/);
+    });
+
+    it("every page has its own title, description and canonical URL", () => {
+      const titles = new Set<string>();
+      for (const p of PAGES) {
+        const html = read(`${p.path}index.html`);
+        const title = /<title>([^<]+)<\/title>/.exec(html)![1]!;
+        expect(titles.has(title)).toBe(false);
+        titles.add(title);
+        expect(html).toContain(`<link rel="canonical" href="${SITE}/${p.path}">`);
+        expect(html).toMatch(/<meta name="description" content="[^"]{80,}">/);
+        expect(html).toContain(`data-engine="${p.engine}"`);
+        JSON.parse(/<script type="application\/ld\+json">(.*?)<\/script>/s.exec(html)![1]!);
+      }
+      expect(read("404.html")).toContain('<meta name="robots" content="noindex">');
+    });
+
+    it("the sitemap and robots.txt list every page", () => {
+      const sitemap = read("sitemap.xml");
+      for (const p of PAGES) expect(sitemap).toContain(`<loc>${SITE}/${p.path}</loc>`);
+      expect(read("robots.txt")).toContain(`Sitemap: ${SITE}/sitemap.xml`);
+      for (const p of PAGES) expect(read("SHA256SUMS")).toContain(`  ${p.path}index.html`);
     });
 
     it("offers every database and the account check", () => {
-      const html = readFileSync(dist, "utf8");
+      const html = read("index.html");
       for (const id of ["engines", "checkForm", "dbTable", "generator", "check", "faq"]) expect(html).toContain(`id="${id}"`);
     });
   });

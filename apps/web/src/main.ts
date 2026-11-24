@@ -30,7 +30,7 @@ import {
 import { formToConfig, splitList, type FormValues } from "./form.js";
 import { ENGINE_DEFAULTS } from "./defaults.js";
 
-const VERSION = "0.2.0";
+const VERSION = "0.3.0";
 const $ = <T extends HTMLElement = HTMLInputElement>(id: string) => document.getElementById(id) as T;
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
@@ -92,7 +92,21 @@ function init() {
     if (f) download(f.name, f.content);
   });
   $("downloadAll").addEventListener("click", () => files.forEach((f, i) => setTimeout(() => download(f.name, f.content), i * 250)));
-  selectEngine("postgresql", false);
+  // Pages for one database or audience preset the form (kaizam.com/mysql/, /app-review/ …).
+  const preset = document.body.dataset.engine as Engine | undefined;
+  const presetProfile = document.body.dataset.profile as Profile | undefined;
+  if (presetProfile && (PROFILES as readonly string[]).includes(presetProfile)) {
+    profile.value = presetProfile;
+    profile.dispatchEvent(new Event("change"));
+  }
+  if (preset && (ENGINES as readonly string[]).includes(preset)) {
+    selectEngine(preset, true);
+    const sel = $<HTMLSelectElement>("cEngine");
+    sel.value = preset;
+    sel.dispatchEvent(new Event("change"));
+  } else {
+    selectEngine("postgresql", false);
+  }
 }
 
 function renderEngineButtons() {
@@ -116,7 +130,7 @@ function renderTables() {
   const tbody = document.querySelector("#dbTable tbody")!;
   tbody.innerHTML = ENGINES.map((id) => {
     const i = ENGINE_INFO[id];
-    return `<tr><td><b>${esc(i.name)}</b><br><button type="button" class="use" data-use="${id}">Create one</button></td>
+    return `<tr><td><a href="/${id}/">${esc(i.name)}</a><br><button type="button" class="use" data-use="${id}">Create one</button></td>
       <td><span class="badge ${i.support}">${SUPPORT_LABEL[i.support]}</span></td><td>${esc(i.versions)}</td>
       <td>${esc(i.summary)}</td><td>${esc(i.covers || "")}</td></tr>`;
   }).join("");

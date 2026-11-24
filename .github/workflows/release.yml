@@ -42,6 +42,8 @@ jobs:
             v=$(node -p "require('./packages/$p/package.json').version")
             [ "$v" = "$tag" ] || { echo "packages/$p is $v, tag is $tag"; exit 1; }
           done
+          [ "$(node -p "require('./server.json').version")" = "$tag" ] || { echo "server.json version differs from $tag"; exit 1; }
+          grep -q "default: \"$tag\"" action.yml || { echo "action.yml cli-version default differs from $tag"; exit 1; }
       # The trusted publishers allow only `npm stage publish`: each release waits on
       # npmjs.com until a maintainer approves it with 2FA.
       - name: Stage for publishing (core first, the CLI depends on it)

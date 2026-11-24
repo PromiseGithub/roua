@@ -1,0 +1,69 @@
+name: ROUA audit
+description: Fail the build if a "read-only" PostgreSQL account can write, read secrets or never expires.
+author: Promise Okoroji
+branding:
+  icon: shield
+  color: blue
+
+inputs:
+  roles:
+    description: Roles to audit, separated by spaces, commas or new lines. Leave empty and set all to audit every login role.
+    required: false
+    default: ""
+  all:
+    description: Audit every non-superuser login role.
+    required: false
+    default: "false"
+  url-env:
+    description: Name of the environment variable that holds the admin connection string (set it from a secret).
+    required: false
+    default: ADMIN_DATABASE_URL
+  fail-on:
+    description: "fail (default) fails the step on FAIL results; warn also fails on WARN; never only reports."
+    required: false
+    default: fail
+  cli-version:
+    description: Version of @roua-dev/cli to run.
+    required: false
+    default: "0.3.0"
+  cli-path:
+    description: Run a local build of the CLI (path to bin.js) instead of the npm package. For testing this action.
+    required: false
+    default: ""
+
+outputs:
+  ok:
+    description: "true when every audited role passed (no FAIL results)."
+    value: ${{ steps.audit.outputs.ok }}
+  report:
+    description: Path to the JSON report (schemas/roua-report.schema.json).
+    value: ${{ steps.audit.outputs.report }}
+
+runs:
+  using: composite
+  steps:
+    - id: audit
+      shell: bash
+      env:
+        ROUA_ROLES: ${{ inputs.roles }}
+        ROUA_ALL: ${{ inputs.all }}
+        ROUA_URL_ENV: ${{ inputs.url-env }}
+        ROUA_FAIL_ON: ${{ inputs.fail-on }}
+        ROUA_CLI_VERSION: ${{ inputs.cli-version }}
+        ROUA_CLI_PATH: ${{ inputs.cli-path }}
+      run: |
+        set -uo pipefail
+        args=(audit --json --url-env "$ROUA_URL_ENV")
+        for r in $(echo "$ROUA_ROLES" | tr ',\n' '  '); do args+=(--role "$r"); done
+        [ "$ROUA_ALL" = "true" ] && args+=(--all)
+        [ "$ROUA_FAIL_ON" = "warn" ] && args+=(--strict)
+        if [ -n "$ROUA_CLI_PATH" ]; then cli=(node "$ROUA_CLI_PATH"); else cli=(npx --yes "@roua-dev/cli@$ROUA_CLI_VERSION"); fi
+        report="$RUNNER_TEMP/roua-report.json"
+        "${cli[@]}" "${args[@]}" > "$report"
+        code=$?
+        if [ "$code" -eq 2 ]; then echo "::error title=ROUA audit::could not run the audit (usage or connection error)"; exit 2; fi
+        node "$GITHUB_ACTION_PATH/scripts/action-summary.mjs" "$report" >> "$GITHUB_STEP_SUMMARY"
+        echo "report=$report" >> "$GITHUB_OUTPUT"
+        if [ "$code" -eq 0 ]; then echo "ok=true" >> "$GITHUB_OUTPUT"; else echo "ok=false" >> "$GITHUB_OUTPUT"; fi
+        if [ "$code" -ne 0 ] && [ "$ROUA_FAIL_ON" != "never" ]; then exit 1; fi
+        exit 0

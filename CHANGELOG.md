@@ -2,6 +2,13 @@
 
 Notable changes to the ROUA specification and tools. The project uses semantic versioning. Before 1.0, minor versions may contain breaking changes.
 
+## 0.3.0 (2026-11-24)
+
+- **kaizam.com is now a site:** a page per database (kaizam.com/mysql/, /sqlserver/, …) explaining the usual way, what it misses and what ROUA does, guides for AI agents and app-review accounts, plus sitemap.xml, robots.txt, canonical URLs, structured data and a 404 page. Every page is still one offline file with no network requests.
+- **GitHub Action:** `uses: PromiseGithub/roua@v0.3.0` audits PostgreSQL roles in CI, writes a job summary and annotations, and fails the build when an account is not read-only.
+- **MCP server:** `roua mcp` (`npx -y @roua-dev/cli mcp`) gives AI agents tools to list engines, write audit scripts, generate ROUA scripts to a folder (secrets never enter the conversation) and audit a PostgreSQL role live. No new dependencies. Listed in the MCP Registry as io.github.PromiseGithub/roua.
+- **Docker image:** `ghcr.io/promisegithub/roua`, built from source with provenance and an SBOM.
+
 ## 0.2.0 (2026-11-24)
 
 - New engines in `@roua-dev/core` and the web generator: MySQL, MariaDB, SQL Server and Azure SQL, Oracle, MongoDB and Redis/Valkey (tested in CI against real servers), plus Snowflake and BigQuery (preview). Each produces setup, audit, revoke and drop scripts.

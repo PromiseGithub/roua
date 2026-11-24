@@ -25,7 +25,7 @@ import {
 import { connect, redactUrl, urlForUser, urlFromEnv, UsageError } from "./db.js";
 import { loadConfig } from "./config-file.js";
 
-export const VERSION = "0.2.0";
+export const VERSION = "0.3.0";
 
 const HELP = `roua ${VERSION}: Read-Only User Accounts for PostgreSQL (ROUA spec ${ROUA_SPEC_VERSION}, draft)
 
@@ -39,6 +39,7 @@ Is your read-only user actually read-only?
   roua revoke <account> [--drop] [--yes]                    Disable login and end open sessions
   roua list                                                 List ROUA accounts and their expiry
   roua expire --due [--dry-run]                             Revoke every ROUA account past its expiry
+  roua mcp                                                  Run the ROUA MCP server on stdio (for AI agents)
 
 Connections (read from environment variables, never from arguments):
   audit, list, apply, revoke, expire   --url-env NAME   default ADMIN_DATABASE_URL
@@ -78,6 +79,11 @@ export async function main(argv: string[], io: Io = defaultIo()): Promise<number
         return await cmdAudit(rest, io);
       case "verify":
         return await cmdVerify(rest, io);
+      case "mcp": {
+        const { serveMcp } = await import("./mcp.js");
+        await serveMcp(VERSION);
+        return 0;
+      }
       case "init":
         return cmdInit(rest, io);
       case "plan":
