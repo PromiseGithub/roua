@@ -43,7 +43,7 @@ $ npx @roua/cli revoke roua_agent_docs
 
 `apply` generates a strong password, writes only a SCRAM-SHA-256 verifier into the SQL, applies everything in one transaction, then connects **as the new account**. It reruns the audit and attempts real writes and DDL, which PostgreSQL must refuse. Only then does it show the password, once.
 
-Or use the **web generator** (`apps/web/dist/index.html`): a single HTML file that runs offline in your browser and makes no network requests. Enter a database name, an account name and a password, pick a profile and level, and download `setup.sql`, `audit.sql`, `revoke.sql` and `roua.yaml`.
+Or use the **web generator**, online at https://promisegithub.github.io/roua/ or built locally as `apps/web/dist/index.html`: a single HTML file that runs offline in your browser and makes no network requests. Enter a database name, an account name and a password, pick a profile and level, and download `setup.sql`, `audit.sql`, `revoke.sql` and `roua.yaml`.
 
 ## The standard in one table
 
