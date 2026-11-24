@@ -101,6 +101,13 @@ function render(page, { notFound = false } = {}) {
       .replace(/<meta property="og:url"[^>]*>\n/, "")
       .replace(/<script type="application\/ld\+json">.*?<\/script>\n/s, "");
   }
+  // Links to other sites (GitHub, npm…) open in a new tab, without giving that tab
+  // a handle on this page (noopener) or telling it where the visitor came from (noreferrer).
+  html = html.replace(/<a ([^>]*?)href="(https?:\/\/[^"]+)"([^>]*)>/g, (m, before, url, after) => {
+    if (new URL(url).hostname === new URL(SITE).hostname) return m;
+    const attrs = `${before}${after}`.replace(/\s*\b(rel|target)="[^"]*"/g, "").trim();
+    return `<a ${attrs ? attrs + " " : ""}href="${url}" target="_blank" rel="noopener noreferrer">`;
+  });
   const left = html.match(/__[A-Z_]+__/);
   if (left) throw new Error(`Unfilled placeholder ${left[0]} in ${page.path || "index"}`);
   return html;

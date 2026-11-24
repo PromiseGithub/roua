@@ -372,7 +372,7 @@ async function generate() {
   );
   const notes: string[] = [];
   if (ENGINE_INFO[engine].support === "preview") {
-    notes.push(`<p class="preview"><b>Preview.</b> ${esc(ENGINE_INFO[engine].name)} scripts are generated from the vendor's documentation and have not yet been run against a live service. Review them before use. Have an account to test on? <a href="https://github.com/PromiseGithub/roua/issues/new?template=database.yml" rel="noopener">Tell us what worked and what failed</a>: it is how preview engines become tested.</p>`);
+    notes.push(`<p class="preview"><b>Preview.</b> ${esc(ENGINE_INFO[engine].name)} scripts are generated from the vendor's documentation and have not yet been run against a live service. Review them before use. Have an account to test on? <a href="https://github.com/PromiseGithub/roua/issues/new?template=database.yml" target="_blank" rel="noopener noreferrer">Tell us what worked and what failed</a>: it is how preview engines become tested.</p>`);
   }
   if (warnings.length) notes.push(`<div class="warn"><h3>Warnings</h3><ul>${warnings.map((w) => `<li>${esc(w)}</li>`).join("")}</ul></div>`);
   if (manualSteps.length) {

@@ -58,6 +58,12 @@ describe("web generator", () => {
       // Outbound links load nothing; only these hosts are linked.
       const hosts = new Set([...html.matchAll(/href="https?:\/\/([^/"]+)/g)].map((m) => m[1]));
       for (const h of hosts) expect(["github.com", "www.npmjs.com", "kaizam.com"]).toContain(h);
+      // Every link to another site opens in a new tab, with noopener and noreferrer.
+      const external = [...html.matchAll(/<a [^>]*href="https?:\/\/(?!kaizam\.com)[^"]+"[^>]*>/g)].map((m) => m[0]);
+      expect(external.length).toBeGreaterThan(0);
+      for (const a of external) expect(a, a).toMatch(/target="_blank" rel="noopener noreferrer"/);
+      // Links within the site stay in the same tab.
+      for (const a of html.matchAll(/<a [^>]*href="(\/|#)[^"]*"[^>]*>/g)) expect(a[0]).not.toContain("_blank");
       expect(html).not.toMatch(/__[A-Z_]+__/);
     });
 
