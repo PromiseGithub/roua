@@ -216,7 +216,7 @@ export const ENGINE_INFO: Record<Engine, EngineInfo> = {
       statementTimeout: false,
       allowedSources: null,
       requireTls: false,
-      metadata: { how: "VIEW DEFINITION on the schemas plus DENY SELECT: the catalog is visible, rows are not." },
+      metadata: { how: "VIEW DEFINITION on the schemas and no SELECT anywhere: the catalog is visible, rows are not." },
     },
   },
   oracle: {

@@ -51,9 +51,9 @@ function objectFilter(spec: AccountSpec): string {
 /** L0: the catalog of the chosen schemas is visible, no rows are. */
 function metadataGrants(spec: AccountSpec, u: string): string {
   return `-- 4. Structure only (L0): VIEW DEFINITION shows tables, columns and types in these
---    schemas. No SELECT is granted, and SELECT is denied database-wide as well.
+--    schemas. No SELECT is granted on any table or view. (A database-wide DENY SELECT
+--    is deliberately not used: it would also hide the catalog views this level exists for.)
 ${(spec.schemas ?? []).map((s) => `GRANT VIEW DEFINITION ON SCHEMA::${msIdent(s)} TO ${u};`).join("\n")}
-DENY SELECT TO ${u};
 PRINT N'ROUA: structure-only access granted on ${(spec.schemas ?? []).length} schema(s).';
 GO
 `;
