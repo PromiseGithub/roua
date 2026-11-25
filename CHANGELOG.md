@@ -2,7 +2,7 @@
 
 Notable changes to the ROUA specification and tools. The project uses semantic versioning. Before 1.0, minor versions may contain breaking changes.
 
-## Unreleased
+## 0.4.0 (2026-11-25)
 
 **Tools**
 - Structure-only access (L0) on SQL Server, MongoDB, Snowflake and BigQuery, live-tested on SQL Server and MongoDB. Engines that cannot enforce it (MySQL, MariaDB, Oracle, Redis) say why.

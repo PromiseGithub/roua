@@ -30,7 +30,7 @@ import {
 import { formToConfig, splitList, type FormValues } from "./form.js";
 import { ENGINE_DEFAULTS } from "./defaults.js";
 
-const VERSION = "0.3.0";
+const VERSION = "0.4.0";
 const $ = <T extends HTMLElement = HTMLInputElement>(id: string) => document.getElementById(id) as T;
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
