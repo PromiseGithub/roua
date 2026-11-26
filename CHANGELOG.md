@@ -2,7 +2,7 @@
 
 Notable changes to the ROUA specification and tools. The project uses semantic versioning. Before 1.0, minor versions may contain breaking changes.
 
-## Unreleased
+## 0.5.0 (2026-11-26)
 
 **Handling real schemas (SPEC §18)**
 - **Preview before you generate.** Each engine has a read-only discovery script (`discover.sql` / `discover.js`, included with every set of scripts) that lists schemas, tables and columns, never rows. kaizam.com, `roua plan --check` and the MCP `preview_scope` tool resolve the scope against that snapshot. They show which tables become readable and which columns stay hidden and why, and they flag missing schemas, misspelled listed tables, hidden-column entries that match no column, and scopes that would read nothing.

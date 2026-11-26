@@ -34,7 +34,7 @@ import { formToConfig, splitList, type FormValues } from "./form.js";
 import { ENGINE_DEFAULTS } from "./defaults.js";
 import { currentPreview, currentSnapshot, initSchemaUi, refreshSchemaUi, render as renderSchema } from "./schema-ui.js";
 
-const VERSION = "0.4.0";
+const VERSION = "0.5.0";
 const $ = <T extends HTMLElement = HTMLInputElement>(id: string) => document.getElementById(id) as T;
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 

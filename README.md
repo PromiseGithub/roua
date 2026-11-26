@@ -80,7 +80,7 @@ plan.files; // setup.sql, audit.sql, revoke.sql, drop.sql
 ## In CI: the GitHub Action
 
 ```yaml
-- uses: PromiseGithub/roua@v0.4.0
+- uses: PromiseGithub/roua@v0.5.0
   env:
     ADMIN_DATABASE_URL: ${{ secrets.ADMIN_DATABASE_URL }}
   with:
