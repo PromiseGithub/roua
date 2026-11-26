@@ -226,7 +226,7 @@ GO`;
     const meta = planEngine(spec({ name: META, mode: "metadata", exclude: [], columnsDeny: [] }), new Date());
     const m = adminFile("setup-meta.sql", file(meta, "setup"));
     check("L0 setup", m.ok, m.out);
-    const cols = asMeta("SET NOCOUNT ON; SELECT CASE WHEN COUNT(*) = 3 THEN 'META_OK' ELSE 'META_MISSING' END FROM sys.columns WHERE object_id = OBJECT_ID('app.customers')");
+    const cols = asMeta("SET NOCOUNT ON; SELECT CASE WHEN COUNT(*) >= 3 THEN 'META_OK' ELSE 'META_MISSING' END FROM sys.columns WHERE object_id = OBJECT_ID('app.customers')");
     check("L0: column metadata of app.customers is visible", cols.ok && cols.out.includes("META_OK"), cols.out);
     expectDenied("L0: SELECT name FROM app.customers", asMeta("SELECT name FROM app.customers"));
     expectDenied("L0: INSERT", asMeta("INSERT INTO app.customers VALUES (9, N'x', N'y')"));

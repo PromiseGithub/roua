@@ -232,7 +232,8 @@ BEGIN
   END LOOP;
   CLOSE tabs;
   IF v_granted = 0 THEN
-    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ROUA: the scope matched no readable tables, so the account can read nothing. Check the databases, listed tables and exclusions (run discover.sql to see what exists).';
+    -- MySQL limits MESSAGE_TEXT to 128 characters.
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'ROUA: the scope matched no readable tables, so the account can read nothing. Check the scope.';
   END IF;
 END $$
 
